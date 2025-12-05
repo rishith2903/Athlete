@@ -1,0 +1,46 @@
+spring:
+  config:
+    activate:
+      on-profile: test
+
+  data:
+    mongodb:
+      host: localhost
+      port: 27017
+      database: fitness_test
+      auto-index-creation: true
+  
+  redis:
+    host: localhost
+    port: 6379
+    password: ''
+    timeout: 2000
+
+# JWT settings (override if needed); defaults still come from main application.yml via env vars
+jwt:
+  secret: ${JWT_SECRET:404E635266556A586E3272357538782F413F4428472B4B6250645367566B5970}
+  expiration: 86400000
+  refresh-expiration: 604800000
+
+# Embedded MongoDB for testing
+de:
+  flapdoodle:
+    mongodb:
+      embedded:
+        version: 6.0.2
+
+# Test-specific configuration
+server:
+  port: 0  # Random port for testing
+
+logging:
+  level:
+    root: INFO
+    com.aifitness: DEBUG
+    org.springframework.web: DEBUG
+    org.springframework.security: DEBUG
+
+# Disable AI services for testing
+ai:
+  services:
+    enabled: false

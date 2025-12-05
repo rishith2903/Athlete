@@ -1,0 +1,24 @@
+spring:
+  application:
+    name: fitness-backend
+
+  # In production, never fall back to localhost. Require MONGODB_URI.
+  data:
+    mongodb:
+      uri: ${MONGODB_URI}
+      auto-index-creation: true
+
+  redis:
+    host: ${REDIS_HOST}
+    port: ${REDIS_PORT:6379}
+    password: ${REDIS_PASSWORD:}
+    timeout: 2000ms
+
+server:
+  port: ${PORT:8080}
+
+logging:
+  level:
+    root: INFO
+    org.springframework.data.mongodb: INFO
+    com.aifitness.backend: INFO

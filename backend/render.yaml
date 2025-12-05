@@ -1,0 +1,50 @@
+services:
+  - type: web
+    name: fitness-backend
+    runtime: docker
+    dockerfilePath: ./Dockerfile
+    dockerContext: .
+    envVars:
+      - key: SPRING_PROFILES_ACTIVE
+        value: production
+      - key: SPRING_PROFILE
+        value: production
+      - key: PORT
+        value: 8080
+      - key: MONGODB_URI
+        value: mongodb+srv://rishithkumar2903_db_user:Rishith2005@cluster0.mnql7ri.mongodb.net/fitness_db?appName=Cluster0
+      - key: SPRING_DATA_MONGODB_URI
+        value: mongodb+srv://rishithkumar2903_db_user:Rishith2005@cluster0.mnql7ri.mongodb.net/fitness_db?appName=Cluster0
+      - key: REDIS_HOST
+        fromService:
+          name: fitness-redis
+          type: redis
+          property: host
+      - key: REDIS_PORT
+        fromService:
+          name: fitness-redis
+          type: redis
+          property: port
+      - key: REDIS_PASSWORD
+        fromService:
+          name: fitness-redis
+          type: redis
+          property: password
+      - key: JWT_SECRET
+        generateValue: true
+      - key: WORKOUT_SERVICE_URL
+        value: https://fitness-workout-service.onrender.com
+      - key: NUTRITION_SERVICE_URL
+        value: https://fitness-nutrition-service.onrender.com
+      - key: POSE_SERVICE_URL
+        value: https://fitness-pose-service.onrender.com
+      - key: CHATBOT_SERVICE_URL
+        value: https://fitness-chatbot-service.onrender.com
+      - key: CORS_ORIGINS
+        value: https://your-frontend.onrender.com
+    healthCheckPath: /actuator/health
+    autoDeploy: true
+
+  - type: redis
+    name: fitness-redis
+    plan: free

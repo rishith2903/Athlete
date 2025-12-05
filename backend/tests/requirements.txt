@@ -1,0 +1,43 @@
+# Testing frameworks
+pytest==7.4.3
+pytest-asyncio==0.21.1
+pytest-cov==4.1.0
+pytest-mock==3.12.0
+pytest-timeout==2.2.0
+
+# API testing
+httpx==0.25.1
+requests==2.31.0
+responses==0.24.1
+
+# Data validation
+pydantic==2.5.2
+jsonschema==4.20.0
+
+# Test data generation
+faker==20.1.0
+factory-boy==3.3.0
+
+# Image/Video testing for pose checker
+opencv-python==4.8.1.78
+Pillow==10.1.0
+imageio==2.33.0
+
+# Performance testing
+locust==2.20.0
+
+# Assertion libraries
+assertpy==1.1
+
+# Reporting
+pytest-html==4.1.1
+allure-pytest==2.13.2
+junitparser==3.1.0
+
+# Code quality
+coverage==7.3.3
+pytest-benchmark==4.0.0
+
+# Mock data
+numpy==1.24.3
+pandas==2.1.3
