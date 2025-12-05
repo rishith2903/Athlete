@@ -650,5 +650,4 @@ This project is licensed under the **MIT License** - see the [LICENSE](LICENSE) 
   <a href="https://aithlete-frontend.vercel.app/">View Demo</a> •
   <a href="https://github.com/rishith2903/AIthlete/issues">Report Bug</a> •
   <a href="https://github.com/rishith2903/AIthlete/issues">Request Feature</a>
-</p>#   A t h l e t e  
- 
+</p>#
