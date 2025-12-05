@@ -1,0 +1,16 @@
+# Render Blueprint for AIthlete AI Services
+# Deploy as: Render Dashboard -> New -> Blueprint -> Connect this repo
+
+services:
+  - type: web
+    name: aithlete-ai-services
+    runtime: docker
+    dockerfilePath: ./Dockerfile
+    dockerContext: .
+    envVars:
+      - key: PORT
+        value: 8000
+      - key: PYTHONUNBUFFERED
+        value: "1"
+    healthCheckPath: /health
+    autoDeploy: true
