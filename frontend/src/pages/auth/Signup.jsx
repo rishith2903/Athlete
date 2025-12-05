@@ -22,45 +22,45 @@ const Signup = () => {
 
   const validateForm = () => {
     const newErrors = {};
-    
+
     if (!formData.name) {
       newErrors.name = 'Name is required';
     }
-    
+
     if (!formData.email) {
       newErrors.email = 'Email is required';
     } else if (!/\S+@\S+\.\S+/.test(formData.email)) {
       newErrors.email = 'Email is invalid';
     }
-    
+
     if (!formData.password) {
       newErrors.password = 'Password is required';
     } else if (formData.password.length < 8) {
       newErrors.password = 'Password must be at least 8 characters';
     }
-    
+
     if (!formData.confirmPassword) {
       newErrors.confirmPassword = 'Please confirm your password';
     } else if (formData.password !== formData.confirmPassword) {
       newErrors.confirmPassword = 'Passwords do not match';
     }
-    
+
     if (!formData.dateOfBirth) {
       newErrors.dateOfBirth = 'Date of birth is required';
     }
-    
+
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    
+
     if (!validateForm()) return;
-    
+
     const { confirmPassword, ...userData } = formData;
     const result = await signup(userData);
-    
+
     if (result.success) {
       navigate('/dashboard');
     } else {
@@ -119,8 +119,10 @@ const Signup = () => {
                 <label htmlFor="name" className="label">
                   Full Name
                 </label>
-                <div className="relative">
-                  <User className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-5 w-5" />
+                <div className="relative flex items-center">
+                  <span className="absolute left-3 flex items-center justify-center pointer-events-none">
+                    <User className="text-gray-400 h-5 w-5" />
+                  </span>
                   <input
                     id="name"
                     name="name"
@@ -130,7 +132,7 @@ const Signup = () => {
                     value={formData.name}
                     onChange={handleChange}
                     className={cn(
-                      "input pl-10",
+                      "input pl-11",
                       errors.name && "border-red-500 focus:ring-red-500"
                     )}
                     placeholder="Enter your full name"
@@ -145,8 +147,10 @@ const Signup = () => {
                 <label htmlFor="email" className="label">
                   Email Address
                 </label>
-                <div className="relative">
-                  <Mail className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-5 w-5" />
+                <div className="relative flex items-center">
+                  <span className="absolute left-3 flex items-center justify-center pointer-events-none">
+                    <Mail className="text-gray-400 h-5 w-5" />
+                  </span>
                   <input
                     id="email"
                     name="email"
@@ -156,7 +160,7 @@ const Signup = () => {
                     value={formData.email}
                     onChange={handleChange}
                     className={cn(
-                      "input pl-10",
+                      "input pl-11",
                       errors.email && "border-red-500 focus:ring-red-500"
                     )}
                     placeholder="Enter your email"
@@ -171,8 +175,10 @@ const Signup = () => {
                 <label htmlFor="phone" className="label">
                   Phone Number (Optional)
                 </label>
-                <div className="relative">
-                  <Phone className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-5 w-5" />
+                <div className="relative flex items-center">
+                  <span className="absolute left-3 flex items-center justify-center pointer-events-none">
+                    <Phone className="text-gray-400 h-5 w-5" />
+                  </span>
                   <input
                     id="phone"
                     name="phone"
@@ -180,7 +186,7 @@ const Signup = () => {
                     autoComplete="tel"
                     value={formData.phone}
                     onChange={handleChange}
-                    className="input pl-10"
+                    className="input pl-11"
                     placeholder="Enter your phone number"
                   />
                 </div>
@@ -190,8 +196,10 @@ const Signup = () => {
                 <label htmlFor="dateOfBirth" className="label">
                   Date of Birth
                 </label>
-                <div className="relative">
-                  <Calendar className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-5 w-5" />
+                <div className="relative flex items-center">
+                  <span className="absolute left-3 flex items-center justify-center pointer-events-none">
+                    <Calendar className="text-gray-400 h-5 w-5" />
+                  </span>
                   <input
                     id="dateOfBirth"
                     name="dateOfBirth"
@@ -200,7 +208,7 @@ const Signup = () => {
                     value={formData.dateOfBirth}
                     onChange={handleChange}
                     className={cn(
-                      "input pl-10",
+                      "input pl-11",
                       errors.dateOfBirth && "border-red-500 focus:ring-red-500"
                     )}
                   />
@@ -233,8 +241,10 @@ const Signup = () => {
                 <label htmlFor="password" className="label">
                   Password
                 </label>
-                <div className="relative">
-                  <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-5 w-5" />
+                <div className="relative flex items-center">
+                  <span className="absolute left-3 flex items-center justify-center pointer-events-none">
+                    <Lock className="text-gray-400 h-5 w-5" />
+                  </span>
                   <input
                     id="password"
                     name="password"
@@ -244,7 +254,7 @@ const Signup = () => {
                     value={formData.password}
                     onChange={handleChange}
                     className={cn(
-                      "input pl-10 pr-10",
+                      "input pl-11 pr-11",
                       errors.password && "border-red-500 focus:ring-red-500"
                     )}
                     placeholder="Create a password"
@@ -252,7 +262,7 @@ const Signup = () => {
                   <button
                     type="button"
                     onClick={() => setShowPassword(!showPassword)}
-                    className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600"
+                    className="absolute right-3 flex items-center justify-center text-gray-400 hover:text-gray-600 transition-colors"
                   >
                     {showPassword ? (
                       <EyeOff className="h-5 w-5" />
@@ -270,8 +280,10 @@ const Signup = () => {
                 <label htmlFor="confirmPassword" className="label">
                   Confirm Password
                 </label>
-                <div className="relative">
-                  <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-5 w-5" />
+                <div className="relative flex items-center">
+                  <span className="absolute left-3 flex items-center justify-center pointer-events-none">
+                    <Lock className="text-gray-400 h-5 w-5" />
+                  </span>
                   <input
                     id="confirmPassword"
                     name="confirmPassword"
@@ -281,7 +293,7 @@ const Signup = () => {
                     value={formData.confirmPassword}
                     onChange={handleChange}
                     className={cn(
-                      "input pl-10",
+                      "input pl-11",
                       errors.confirmPassword && "border-red-500 focus:ring-red-500"
                     )}
                     placeholder="Confirm your password"

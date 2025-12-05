@@ -8,6 +8,7 @@ import com.aifitness.backend.exception.BadRequestException;
 import com.aifitness.backend.exception.ResourceNotFoundException;
 import com.aifitness.backend.repository.UserRepository;
 import com.aifitness.backend.security.JwtTokenProvider;
+import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -18,6 +19,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.Set;
@@ -26,26 +28,83 @@ import java.util.Set;
 @Service
 @RequiredArgsConstructor
 public class AuthService {
-    
+
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
     private final JwtTokenProvider tokenProvider;
     private final AuthenticationManager authenticationManager;
-    
+
     @Value("${jwt.expiration}")
     private Long jwtExpiration;
-    
+
+    // Demo user credentials
+    private static final String DEMO_EMAIL = "demo@athlete.com";
+    private static final String DEMO_PASSWORD = "Demo@123";
+    private static final String DEMO_USERNAME = "demo_user";
+
+    @PostConstruct
+    public void initDemoUser() {
+        try {
+            if (!userRepository.existsByEmail(DEMO_EMAIL)) {
+                log.info("Creating demo user for testing purposes...");
+                createDemoUser();
+                log.info("Demo user created successfully with email: {}", DEMO_EMAIL);
+            } else {
+                log.info("Demo user already exists with email: {}", DEMO_EMAIL);
+            }
+        } catch (Exception e) {
+            log.error("Failed to create demo user: {}", e.getMessage());
+        }
+    }
+
+    @Transactional
+    public void createDemoUser() {
+        User demoUser = User.builder()
+                .username(DEMO_USERNAME)
+                .email(DEMO_EMAIL)
+                .password(passwordEncoder.encode(DEMO_PASSWORD))
+                .firstName("Demo")
+                .lastName("User")
+                .phoneNumber("+1234567890")
+                .dateOfBirth(LocalDate.of(1995, 6, 15))
+                .height(175.0)
+                .weight(70.0)
+                .gender("MALE")
+                .activityLevel("MODERATE")
+                .fitnessGoal("MUSCLE_GAIN")
+                .targetWeight(75.0)
+                .targetDate(LocalDate.now().plusMonths(3))
+                .medicalConditions(new HashSet<>())
+                .allergies(new HashSet<>())
+                .dietaryRestrictions(new HashSet<>())
+                .preferredExercises(Set.of("WEIGHT_TRAINING", "CARDIO", "HIIT"))
+                .equipmentAvailable(Set.of("DUMBBELLS", "BARBELL", "RESISTANCE_BANDS", "PULL_UP_BAR"))
+                .workoutDuration(60)
+                .workoutsPerWeek(4)
+                .roles(Set.of("USER"))
+                .subscriptionPlan("PREMIUM")
+                .enabled(true)
+                .accountNonExpired(true)
+                .accountNonLocked(true)
+                .credentialsNonExpired(true)
+                .createdAt(LocalDateTime.now())
+                .updatedAt(LocalDateTime.now())
+                .build();
+
+        userRepository.save(demoUser);
+    }
+
     @Transactional
     public JwtResponse register(RegisterRequest request) {
         // Check if user already exists
         if (userRepository.existsByEmail(request.getEmail())) {
             throw new BadRequestException("Email already registered");
         }
-        
+
         if (userRepository.existsByUsername(request.getUsername())) {
             throw new BadRequestException("Username already taken");
         }
-        
+
         // Create new user
         User user = User.builder()
                 .username(request.getUsername())
@@ -62,11 +121,15 @@ public class AuthService {
                 .fitnessGoal(request.getFitnessGoal())
                 .targetWeight(request.getTargetWeight())
                 .targetDate(request.getTargetDate())
-                .medicalConditions(request.getMedicalConditions() != null ? request.getMedicalConditions() : new HashSet<>())
+                .medicalConditions(
+                        request.getMedicalConditions() != null ? request.getMedicalConditions() : new HashSet<>())
                 .allergies(request.getAllergies() != null ? request.getAllergies() : new HashSet<>())
-                .dietaryRestrictions(request.getDietaryRestrictions() != null ? request.getDietaryRestrictions() : new HashSet<>())
-                .preferredExercises(request.getPreferredExercises() != null ? request.getPreferredExercises() : new HashSet<>())
-                .equipmentAvailable(request.getEquipmentAvailable() != null ? request.getEquipmentAvailable() : new HashSet<>())
+                .dietaryRestrictions(
+                        request.getDietaryRestrictions() != null ? request.getDietaryRestrictions() : new HashSet<>())
+                .preferredExercises(
+                        request.getPreferredExercises() != null ? request.getPreferredExercises() : new HashSet<>())
+                .equipmentAvailable(
+                        request.getEquipmentAvailable() != null ? request.getEquipmentAvailable() : new HashSet<>())
                 .workoutDuration(request.getWorkoutDuration())
                 .workoutsPerWeek(request.getWorkoutsPerWeek())
                 .roles(Set.of("USER"))
@@ -76,103 +139,101 @@ public class AuthService {
                 .accountNonLocked(true)
                 .credentialsNonExpired(true)
                 .build();
-        
+
         user = userRepository.save(user);
-        
+
         // Generate tokens
         String accessToken = tokenProvider.generateToken(user);
         String refreshToken = tokenProvider.generateRefreshToken(user);
-        
+
         // Save refresh token
         user.setRefreshToken(refreshToken);
         user.setLastLoginAt(LocalDateTime.now());
         userRepository.save(user);
-        
+
         return buildJwtResponse(user, accessToken, refreshToken);
     }
-    
+
     @Transactional
     public JwtResponse login(LoginRequest request) {
         Authentication authentication = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(
                         request.getUsernameOrEmail(),
-                        request.getPassword()
-                )
-        );
-        
+                        request.getPassword()));
+
         User user = (User) authentication.getPrincipal();
-        
+
         // Generate tokens
         String accessToken = tokenProvider.generateToken(user);
         String refreshToken = tokenProvider.generateRefreshToken(user);
-        
+
         // Save refresh token and update last login
         user.setRefreshToken(refreshToken);
         user.setLastLoginAt(LocalDateTime.now());
         userRepository.save(user);
-        
+
         return buildJwtResponse(user, accessToken, refreshToken);
     }
-    
+
     @Transactional
     public JwtResponse refreshToken(String refreshToken) {
         if (!tokenProvider.validateToken(refreshToken)) {
             throw new BadRequestException("Invalid refresh token");
         }
-        
+
         String username = tokenProvider.extractUsername(refreshToken);
         User user = userRepository.findByUsername(username)
                 .orElseThrow(() -> new ResourceNotFoundException("User not found"));
-        
+
         if (!refreshToken.equals(user.getRefreshToken())) {
             throw new BadRequestException("Invalid refresh token");
         }
-        
+
         // Generate new tokens
         String newAccessToken = tokenProvider.generateToken(user);
         String newRefreshToken = tokenProvider.generateRefreshToken(user);
-        
+
         // Save new refresh token
         user.setRefreshToken(newRefreshToken);
         userRepository.save(user);
-        
+
         return buildJwtResponse(user, newAccessToken, newRefreshToken);
     }
-    
+
     @Transactional
     public void logout(String token) {
         String jwt = token.substring(7); // Remove "Bearer " prefix
         String username = tokenProvider.extractUsername(jwt);
-        
+
         User user = userRepository.findByUsername(username)
                 .orElseThrow(() -> new ResourceNotFoundException("User not found"));
-        
+
         // Clear refresh token
         user.setRefreshToken(null);
         userRepository.save(user);
     }
-    
+
     public void sendPasswordResetEmail(String email) {
         User user = userRepository.findByEmail(email)
                 .orElseThrow(() -> new ResourceNotFoundException("User not found with email: " + email));
-        
+
         // TODO: Implement email service to send password reset email
         log.info("Password reset email would be sent to: {}", email);
     }
-    
+
     @Transactional
     public void resetPassword(String token, String newPassword) {
         // TODO: Implement password reset token validation
         // For now, this is a placeholder
         log.info("Password reset functionality to be implemented");
     }
-    
+
     @Transactional
     public void verifyEmail(String token) {
         // TODO: Implement email verification
         log.info("Email verification functionality to be implemented");
     }
-    
+
     private JwtResponse buildJwtResponse(User user, String accessToken, String refreshToken) {
         return JwtResponse.builder()
                 .accessToken(accessToken)

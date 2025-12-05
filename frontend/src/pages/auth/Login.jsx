@@ -1,14 +1,21 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { Eye, EyeOff, Mail, Lock, Loader2 } from 'lucide-react';
+import { Eye, EyeOff, Mail, Lock, Loader2, Play } from 'lucide-react';
 import { useAuth } from '../../contexts/AuthContext';
 import { cn } from '../../lib/utils';
+
+// Demo credentials
+const DEMO_CREDENTIALS = {
+  email: 'demo@athlete.com',
+  password: 'Demo@123'
+};
 
 const Login = () => {
   const navigate = useNavigate();
   const { login, loading } = useAuth();
   const [showPassword, setShowPassword] = useState(false);
+  const [isDemoLoading, setIsDemoLoading] = useState(false);
   const [formData, setFormData] = useState({
     email: '',
     password: '',
@@ -17,28 +24,52 @@ const Login = () => {
 
   const validateForm = () => {
     const newErrors = {};
-    
+
     if (!formData.email) {
       newErrors.email = 'Email is required';
     } else if (!/\S+@\S+\.\S+/.test(formData.email)) {
       newErrors.email = 'Email is invalid';
     }
-    
+
     if (!formData.password) {
       newErrors.password = 'Password is required';
     }
-    
+
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    
+
     if (!validateForm()) return;
-    
+
     const result = await login(formData.email, formData.password);
-    
+
+    if (result.success) {
+      navigate('/dashboard');
+    } else {
+      setErrors({ general: result.error });
+    }
+  };
+
+  const handleDemoLogin = async () => {
+    setIsDemoLoading(true);
+    setErrors({});
+
+    // Fill in demo credentials with animation effect
+    setFormData({
+      email: DEMO_CREDENTIALS.email,
+      password: DEMO_CREDENTIALS.password,
+    });
+
+    // Small delay to show the filled form
+    await new Promise(resolve => setTimeout(resolve, 500));
+
+    const result = await login(DEMO_CREDENTIALS.email, DEMO_CREDENTIALS.password);
+
+    setIsDemoLoading(false);
+
     if (result.success) {
       navigate('/dashboard');
     } else {
@@ -97,8 +128,10 @@ const Login = () => {
                 <label htmlFor="email" className="label">
                   Email Address
                 </label>
-                <div className="relative">
-                  <Mail className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-5 w-5" />
+                <div className="relative flex items-center">
+                  <span className="absolute left-3 flex items-center justify-center pointer-events-none">
+                    <Mail className="text-gray-400 h-5 w-5" />
+                  </span>
                   <input
                     id="email"
                     name="email"
@@ -108,7 +141,7 @@ const Login = () => {
                     value={formData.email}
                     onChange={handleChange}
                     className={cn(
-                      "input pl-10",
+                      "input pl-11",
                       errors.email && "border-red-500 focus:ring-red-500"
                     )}
                     placeholder="Enter your email"
@@ -123,8 +156,10 @@ const Login = () => {
                 <label htmlFor="password" className="label">
                   Password
                 </label>
-                <div className="relative">
-                  <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-5 w-5" />
+                <div className="relative flex items-center">
+                  <span className="absolute left-3 flex items-center justify-center pointer-events-none">
+                    <Lock className="text-gray-400 h-5 w-5" />
+                  </span>
                   <input
                     id="password"
                     name="password"
@@ -134,7 +169,7 @@ const Login = () => {
                     value={formData.password}
                     onChange={handleChange}
                     className={cn(
-                      "input pl-10 pr-10",
+                      "input pl-11 pr-11",
                       errors.password && "border-red-500 focus:ring-red-500"
                     )}
                     placeholder="Enter your password"
@@ -142,7 +177,7 @@ const Login = () => {
                   <button
                     type="button"
                     onClick={() => setShowPassword(!showPassword)}
-                    className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600"
+                    className="absolute right-3 flex items-center justify-center text-gray-400 hover:text-gray-600 transition-colors"
                   >
                     {showPassword ? (
                       <EyeOff className="h-5 w-5" />
@@ -177,13 +212,13 @@ const Login = () => {
               </div>
             </div>
 
-            <div>
+            <div className="space-y-3">
               <button
                 type="submit"
-                disabled={loading}
+                disabled={loading || isDemoLoading}
                 className={cn(
                   "w-full flex justify-center items-center btn-primary",
-                  loading && "opacity-50 cursor-not-allowed"
+                  (loading || isDemoLoading) && "opacity-50 cursor-not-allowed"
                 )}
               >
                 {loading ? (
@@ -195,6 +230,35 @@ const Login = () => {
                   'Sign In'
                 )}
               </button>
+
+              {/* Demo Login Button */}
+              <button
+                type="button"
+                onClick={handleDemoLogin}
+                disabled={loading || isDemoLoading}
+                className={cn(
+                  "w-full flex justify-center items-center gap-2 px-6 py-3 rounded-lg font-medium transition-all duration-200",
+                  "bg-gradient-to-r from-emerald-500 to-teal-500 text-white",
+                  "hover:from-emerald-600 hover:to-teal-600 shadow-md hover:shadow-lg",
+                  (loading || isDemoLoading) && "opacity-50 cursor-not-allowed"
+                )}
+              >
+                {isDemoLoading ? (
+                  <>
+                    <Loader2 className="animate-spin h-5 w-5" />
+                    Starting Demo...
+                  </>
+                ) : (
+                  <>
+                    <Play className="h-5 w-5" />
+                    Try Demo Account
+                  </>
+                )}
+              </button>
+
+              <p className="text-center text-xs text-gray-500">
+                Use demo account to explore features without signing up
+              </p>
             </div>
 
             <div className="text-center">
