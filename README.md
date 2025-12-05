@@ -35,9 +35,9 @@ The AI integration spans multiple domains: **Deep Reinforcement Learning** power
 
 | Service | URL | Status |
 |---------|-----|--------|
-| **Frontend** | [aithlete-frontend.vercel.app](https://aithlete-frontend.vercel.app/) | [![Frontend Status](https://img.shields.io/badge/status-live-success)](https://aithlete-frontend.vercel.app/) |
-| **Backend API** | Render Deployment | [![Backend Status](https://img.shields.io/badge/status-live-success)]() |
-| **API Docs** | `/swagger-ui.html` | Swagger UI |
+| **Frontend** | [athlete-eight.vercel.app](https://athlete-eight.vercel.app/) | [![Frontend Status](https://img.shields.io/badge/status-live-success)](https://athlete-eight.vercel.app/) |
+| **Backend API** | [athlete-klsi.onrender.com](https://athlete-klsi.onrender.com) | [![Backend Status](https://img.shields.io/badge/status-live-success)](https://athlete-klsi.onrender.com) |
+| **API Docs** | [Swagger UI](https://athlete-klsi.onrender.com/swagger-ui.html) | Interactive Docs |
 
 ---
 
@@ -647,7 +647,7 @@ This project is licensed under the **MIT License** - see the [LICENSE](LICENSE) 
 </p>
 
 <p align="center">
-  <a href="https://aithlete-frontend.vercel.app/">View Demo</a> •
-  <a href="https://github.com/rishith2903/AIthlete/issues">Report Bug</a> •
-  <a href="https://github.com/rishith2903/AIthlete/issues">Request Feature</a>
-</p>#
+  <a href="https://athlete-eight.vercel.app/">View Demo</a> •
+  <a href="https://github.com/rishith2903/Athlete/issues">Report Bug</a> •
+  <a href="https://github.com/rishith2903/Athlete/issues">Request Feature</a>
+</p>
