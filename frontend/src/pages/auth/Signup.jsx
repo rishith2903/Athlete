@@ -91,7 +91,7 @@ const Signup = () => {
               initial={{ scale: 0 }}
               animate={{ scale: 1 }}
               transition={{ duration: 0.5, delay: 0.2 }}
-              className="mx-auto h-16 w-16 bg-primary-600 rounded-full flex items-center justify-center"
+              className="mx-auto h-16 w-16 bg-blue-600 rounded-full flex items-center justify-center"
             >
               <span className="text-white text-2xl font-bold">FIT</span>
             </motion.div>
@@ -119,10 +119,8 @@ const Signup = () => {
                 <label htmlFor="name" className="label">
                   Full Name
                 </label>
-                <div className="relative flex items-center">
-                  <span className="absolute left-3 flex items-center justify-center pointer-events-none">
-                    <User className="text-gray-400 h-5 w-5" />
-                  </span>
+                <div className="relative">
+                  <User className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 h-5 w-5 pointer-events-none" />
                   <input
                     id="name"
                     name="name"
@@ -132,7 +130,7 @@ const Signup = () => {
                     value={formData.name}
                     onChange={handleChange}
                     className={cn(
-                      "input pl-11",
+                      "input pl-12",
                       errors.name && "border-red-500 focus:ring-red-500"
                     )}
                     placeholder="Enter your full name"
@@ -147,10 +145,8 @@ const Signup = () => {
                 <label htmlFor="email" className="label">
                   Email Address
                 </label>
-                <div className="relative flex items-center">
-                  <span className="absolute left-3 flex items-center justify-center pointer-events-none">
-                    <Mail className="text-gray-400 h-5 w-5" />
-                  </span>
+                <div className="relative">
+                  <Mail className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 h-5 w-5 pointer-events-none" />
                   <input
                     id="email"
                     name="email"
@@ -160,7 +156,7 @@ const Signup = () => {
                     value={formData.email}
                     onChange={handleChange}
                     className={cn(
-                      "input pl-11",
+                      "input pl-12",
                       errors.email && "border-red-500 focus:ring-red-500"
                     )}
                     placeholder="Enter your email"
@@ -175,10 +171,8 @@ const Signup = () => {
                 <label htmlFor="phone" className="label">
                   Phone Number (Optional)
                 </label>
-                <div className="relative flex items-center">
-                  <span className="absolute left-3 flex items-center justify-center pointer-events-none">
-                    <Phone className="text-gray-400 h-5 w-5" />
-                  </span>
+                <div className="relative">
+                  <Phone className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 h-5 w-5 pointer-events-none" />
                   <input
                     id="phone"
                     name="phone"
@@ -186,7 +180,7 @@ const Signup = () => {
                     autoComplete="tel"
                     value={formData.phone}
                     onChange={handleChange}
-                    className="input pl-11"
+                    className="input pl-12"
                     placeholder="Enter your phone number"
                   />
                 </div>
@@ -196,10 +190,8 @@ const Signup = () => {
                 <label htmlFor="dateOfBirth" className="label">
                   Date of Birth
                 </label>
-                <div className="relative flex items-center">
-                  <span className="absolute left-3 flex items-center justify-center pointer-events-none">
-                    <Calendar className="text-gray-400 h-5 w-5" />
-                  </span>
+                <div className="relative">
+                  <Calendar className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 h-5 w-5 pointer-events-none" />
                   <input
                     id="dateOfBirth"
                     name="dateOfBirth"
@@ -208,7 +200,7 @@ const Signup = () => {
                     value={formData.dateOfBirth}
                     onChange={handleChange}
                     className={cn(
-                      "input pl-11",
+                      "input pl-12",
                       errors.dateOfBirth && "border-red-500 focus:ring-red-500"
                     )}
                   />
@@ -241,10 +233,8 @@ const Signup = () => {
                 <label htmlFor="password" className="label">
                   Password
                 </label>
-                <div className="relative flex items-center">
-                  <span className="absolute left-3 flex items-center justify-center pointer-events-none">
-                    <Lock className="text-gray-400 h-5 w-5" />
-                  </span>
+                <div className="relative">
+                  <Lock className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 h-5 w-5 pointer-events-none" />
                   <input
                     id="password"
                     name="password"
@@ -254,7 +244,7 @@ const Signup = () => {
                     value={formData.password}
                     onChange={handleChange}
                     className={cn(
-                      "input pl-11 pr-11",
+                      "input pl-12 pr-12",
                       errors.password && "border-red-500 focus:ring-red-500"
                     )}
                     placeholder="Create a password"
@@ -262,7 +252,7 @@ const Signup = () => {
                   <button
                     type="button"
                     onClick={() => setShowPassword(!showPassword)}
-                    className="absolute right-3 flex items-center justify-center text-gray-400 hover:text-gray-600 transition-colors"
+                    className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 transition-colors"
                   >
                     {showPassword ? (
                       <EyeOff className="h-5 w-5" />
@@ -280,10 +270,8 @@ const Signup = () => {
                 <label htmlFor="confirmPassword" className="label">
                   Confirm Password
                 </label>
-                <div className="relative flex items-center">
-                  <span className="absolute left-3 flex items-center justify-center pointer-events-none">
-                    <Lock className="text-gray-400 h-5 w-5" />
-                  </span>
+                <div className="relative">
+                  <Lock className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 h-5 w-5 pointer-events-none" />
                   <input
                     id="confirmPassword"
                     name="confirmPassword"
@@ -293,7 +281,7 @@ const Signup = () => {
                     value={formData.confirmPassword}
                     onChange={handleChange}
                     className={cn(
-                      "input pl-11",
+                      "input pl-12",
                       errors.confirmPassword && "border-red-500 focus:ring-red-500"
                     )}
                     placeholder="Confirm your password"
@@ -311,11 +299,11 @@ const Signup = () => {
                 name="terms"
                 type="checkbox"
                 required
-                className="h-4 w-4 text-primary-600 focus:ring-primary-500 border-gray-300 rounded"
+                className="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded"
               />
               <label htmlFor="terms" className="ml-2 block text-sm text-gray-700">
                 I agree to the{' '}
-                <Link to="/terms" className="text-primary-600 hover:text-primary-500">
+                <Link to="/terms" className="text-blue-600 hover:text-blue-500">
                   Terms and Conditions
                 </Link>
               </label>
@@ -344,7 +332,7 @@ const Signup = () => {
             <div className="text-center">
               <span className="text-sm text-gray-600">
                 Already have an account?{' '}
-                <Link to="/login" className="font-medium text-primary-600 hover:text-primary-500">
+                <Link to="/login" className="font-medium text-blue-600 hover:text-blue-500">
                   Sign in
                 </Link>
               </span>

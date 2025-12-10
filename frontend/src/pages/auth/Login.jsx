@@ -128,10 +128,8 @@ const Login = () => {
                 <label htmlFor="email" className="label">
                   Email Address
                 </label>
-                <div className="relative flex items-center">
-                  <span className="absolute left-3 flex items-center justify-center pointer-events-none">
-                    <Mail className="text-gray-400 h-5 w-5" />
-                  </span>
+                <div className="relative">
+                  <Mail className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 h-5 w-5 pointer-events-none" />
                   <input
                     id="email"
                     name="email"
@@ -141,7 +139,7 @@ const Login = () => {
                     value={formData.email}
                     onChange={handleChange}
                     className={cn(
-                      "input pl-11",
+                      "input pl-12",
                       errors.email && "border-red-500 focus:ring-red-500"
                     )}
                     placeholder="Enter your email"
@@ -156,10 +154,8 @@ const Login = () => {
                 <label htmlFor="password" className="label">
                   Password
                 </label>
-                <div className="relative flex items-center">
-                  <span className="absolute left-3 flex items-center justify-center pointer-events-none">
-                    <Lock className="text-gray-400 h-5 w-5" />
-                  </span>
+                <div className="relative">
+                  <Lock className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 h-5 w-5 pointer-events-none" />
                   <input
                     id="password"
                     name="password"
@@ -169,7 +165,7 @@ const Login = () => {
                     value={formData.password}
                     onChange={handleChange}
                     className={cn(
-                      "input pl-11 pr-11",
+                      "input pl-12 pr-12",
                       errors.password && "border-red-500 focus:ring-red-500"
                     )}
                     placeholder="Enter your password"
@@ -177,7 +173,7 @@ const Login = () => {
                   <button
                     type="button"
                     onClick={() => setShowPassword(!showPassword)}
-                    className="absolute right-3 flex items-center justify-center text-gray-400 hover:text-gray-600 transition-colors"
+                    className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 transition-colors"
                   >
                     {showPassword ? (
                       <EyeOff className="h-5 w-5" />
