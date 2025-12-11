@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 // Point to Spring Boot backend. The backend will call Python AI services.
-const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:8080/api'||'https://athlete-klsi.onrender.com/api';
+const API_BASE_URL =  'http://localhost:8080/api'||'https://athlete-klsi.onrender.com/api';
 
 // Create axios instance with default config
 const api = axios.create({
