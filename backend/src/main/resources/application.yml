@@ -75,7 +75,7 @@ aws:
 
 # CORS Configuration
 cors:
-  allowed-origins: ${CORS_ORIGINS:http://localhost:3000,http://localhost:5173}
+  allowed-origins: ${CORS_ORIGINS:http://localhost:3000,http://localhost:5173,https://athlete-eight.vercel.app}
   allowed-methods: GET,POST,PUT,DELETE,OPTIONS,PATCH
   allowed-headers: "*"
   allow-credentials: true
