@@ -41,7 +41,7 @@ services:
       - key: CHATBOT_SERVICE_URL
         value: https://fitness-chatbot-service.onrender.com
       - key: CORS_ORIGINS
-        value: https://your-frontend.onrender.com
+        value: http://localhost:3000,http://localhost:5173,https://athlete-eight.vercel.app
     healthCheckPath: /actuator/health
     autoDeploy: true
 

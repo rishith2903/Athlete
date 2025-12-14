@@ -32,26 +32,26 @@ import java.util.List;
 @EnableMethodSecurity(prePostEnabled = true)
 @RequiredArgsConstructor
 public class SecurityConfig {
-    
+
     private final UserDetailsService userDetailsService;
     private final JwtAuthenticationFilter jwtAuthenticationFilter;
     private final JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint;
-    
+
     @Value("${cors.allowed-origins}")
     private String allowedOrigins;
-    
+
     @Value("${cors.allowed-methods}")
     private String allowedMethods;
-    
+
     @Value("${cors.allowed-headers}")
     private String allowedHeaders;
-    
+
     @Value("${cors.allow-credentials}")
     private boolean allowCredentials;
-    
+
     @Value("${cors.max-age}")
     private Long maxAge;
-    
+
     private static final String[] PUBLIC_URLS = {
             "/api/auth/**",
             "/api-docs/**",
@@ -61,7 +61,7 @@ public class SecurityConfig {
             "/actuator/health",
             "/actuator/info"
     };
-    
+
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
@@ -77,24 +77,29 @@ public class SecurityConfig {
                         .anyRequest().authenticated())
                 .authenticationProvider(authenticationProvider())
                 .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
-        
+
         return http.build();
     }
-    
+
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
         configuration.setAllowedOrigins(Arrays.asList(allowedOrigins.split(",")));
         configuration.setAllowedMethods(Arrays.asList(allowedMethods.split(",")));
-        configuration.setAllowedHeaders(List.of(allowedHeaders));
+        if ("*".equals(allowedHeaders)) {
+            configuration.setAllowedHeaders(List.of("*"));
+        } else {
+            configuration.setAllowedHeaders(Arrays.asList(allowedHeaders.split(",")));
+        }
+        configuration.setExposedHeaders(List.of("Authorization", "Content-Type"));
         configuration.setAllowCredentials(allowCredentials);
         configuration.setMaxAge(maxAge);
-        
+
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", configuration);
         return source;
     }
-    
+
     @Bean
     public AuthenticationProvider authenticationProvider() {
         DaoAuthenticationProvider authProvider = new DaoAuthenticationProvider();
@@ -102,12 +107,12 @@ public class SecurityConfig {
         authProvider.setPasswordEncoder(passwordEncoder());
         return authProvider;
     }
-    
+
     @Bean
     public AuthenticationManager authenticationManager(AuthenticationConfiguration config) throws Exception {
         return config.getAuthenticationManager();
     }
-    
+
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
