@@ -510,27 +510,57 @@ exerciseType: "SQUAT"
 
 | Attribute | Details |
 |-----------|---------|
-| **Source** | Custom synthetic dataset + user interaction data |
-| **Size** | 50,000+ workout sessions |
-| **Features** | User profile (age, weight, fitness level), goals, equipment, performance history |
-| **Preprocessing** | Normalization, feature encoding, temporal sequence formatting |
+| **Primary Source** | [MegaGym Dataset](https://www.kaggle.com/niharika41298/gym-exercise-data) |
+| **Size** | 2,196 exercises with comprehensive details |
+| **Features** | Exercise name, muscle groups (primary/secondary), equipment, exercise type, difficulty level, instructions |
+| **Secondary Source** | Gym Members Exercise Tracking Dataset |
+| **Secondary Size** | 973 user workout records |
+| **User Features** | Age, weight, BMI, workout type, calories burned, session duration, heart rate, experience level |
+| **Location** | `backend/data/Workout Recommender/` |
 
 ### Pose Estimation Model
 
 | Attribute | Details |
 |-----------|---------|
-| **Source** | MediaPipe BlazePose + custom exercise dataset |
-| **Size** | 10,000+ annotated exercise videos |
-| **Features** | 33 3D keypoints, joint angles, velocity, acceleration |
-| **Preprocessing** | Frame extraction, pose normalization, temporal smoothing |
+| **Source** | [Fitness Pose Analysis Dataset](https://www.kaggle.com/datasets/shashwatwork/fitness-pose-analysis-dataset) |
+| **Size** | 5 comprehensive data files covering multiple exercises |
+| **Files** | `landmarks.csv` (1.4MB), `xyz_distances.csv` (679KB), `3d_distances.csv` (218KB), `angles.csv` (101KB), `labels.csv` (25KB) |
+| **Features** | 33 3D keypoints, joint angles, XYZ distances, 3D distances, exercise labels |
+| **Additional Source** | [Free Exercise Database](https://github.com/yuhonas/free-exercise-db) |
+| **Additional Size** | 800+ exercises with images and instructions |
+| **Location** | `backend/data/Pose Checker/` |
 
 ### Nutrition Model
 
 | Attribute | Details |
 |-----------|---------|
-| **Source** | USDA Food Database + custom meal plans |
-| **Size** | 8,000+ food items, 5,000+ meal plans |
-| **Features** | Macronutrients, micronutrients, calories, dietary restrictions |
+| **Primary Source** | [Food.com Recipes Dataset](https://www.kaggle.com/datasets/shuyangli94/food-com-recipes-and-user-interactions) |
+| **Size** | 230,000+ recipes with 1.1M+ user interactions |
+| **Recipe Files** | `PP_recipes.csv` (205MB), `RAW_recipes.csv` (294MB), `RAW_interactions.csv` (349MB) |
+| **User Data** | `PP_users.csv` (13.5MB), `interactions_train.csv`, `interactions_test.csv`, `interactions_validation.csv` |
+| **Location** | `backend/data/Nutritional Meal Planner/` |
+
+#### Diet-Specific Datasets
+
+| Dataset | Description | Size |
+|---------|-------------|------|
+| **All_Diets.csv** | Comprehensive diet recipes database | 703KB |
+| **Mediterranean Diet** | Mediterranean cuisine recipes | 173KB |
+| **Keto Diet** | Low-carb ketogenic recipes | 135KB |
+| **Vegan Diet** | Plant-based recipes | 138KB |
+| **DASH Diet** | Heart-healthy diet recipes | 145KB |
+| **Paleo Diet** | Paleolithic-style recipes | 112KB |
+| **Location** | `backend/data/FINAL FOOD DATASET/` |
+
+#### Food Nutrition Data
+
+| Dataset | Description | Size |
+|---------|-------------|------|
+| **FOOD-DATA-GROUP1-5** | Categorized food nutrition information | 406KB total |
+| **recipes.csv** | Extended recipe database | 704MB |
+| **recipes.parquet** | Optimized recipe data (Parquet format) | 179MB |
+| **reviews.csv** | User reviews and ratings | 496MB |
+| **Location** | `backend/data/FINAL FOOD DATASET/`
 
 ---
 

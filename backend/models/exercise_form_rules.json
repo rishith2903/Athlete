@@ -1,0 +1,58 @@
+{
+  "squat": {
+    "knee_angle_min": 70,
+    "knee_angle_max": 100,
+    "hip_angle_min": 60,
+    "hip_angle_max": 90,
+    "back_angle_min": 45,
+    "back_angle_max": 75,
+    "key_points": [
+      "Keep knees aligned with toes",
+      "Maintain neutral spine",
+      "Depth: thighs parallel to floor"
+    ]
+  },
+  "pushup": {
+    "elbow_angle_down_min": 80,
+    "elbow_angle_down_max": 100,
+    "elbow_angle_up_min": 160,
+    "elbow_angle_up_max": 180,
+    "body_alignment_tolerance": 10,
+    "key_points": [
+      "Body in straight line",
+      "Elbows at 45\u00b0 from body",
+      "Full range of motion"
+    ]
+  },
+  "pullup": {
+    "elbow_angle_down_min": 0,
+    "elbow_angle_down_max": 30,
+    "elbow_angle_up_min": 160,
+    "elbow_angle_up_max": 180,
+    "key_points": [
+      "Chin above bar at top",
+      "Full arm extension at bottom",
+      "Control the movement"
+    ]
+  },
+  "situp": {
+    "hip_angle_min": 30,
+    "hip_angle_max": 80,
+    "key_points": [
+      "Engage core throughout",
+      "No neck strain",
+      "Controlled movement"
+    ]
+  },
+  "jumping_jack": {
+    "arm_angle_down": 0,
+    "arm_angle_up": 180,
+    "leg_spread_min": 45,
+    "leg_spread_max": 60,
+    "key_points": [
+      "Full arm extension",
+      "Land softly",
+      "Maintain rhythm"
+    ]
+  }
+}

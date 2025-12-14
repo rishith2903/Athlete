@@ -1,0 +1,7 @@
+{
+  "pushup": 0,
+  "pullup": 1,
+  "squat": 2,
+  "situp": 3,
+  "jumping_jack": 4
+}

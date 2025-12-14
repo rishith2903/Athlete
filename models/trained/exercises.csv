@@ -1,0 +1,19 @@
+exercise_id,name,category,muscle_groups,equipment,difficulty,calories_per_minute
+0,Barbell Squat,strength,"quadriceps,glutes,hamstrings",barbell,intermediate,8
+1,Bench Press,strength,"chest,triceps,shoulders",barbell,intermediate,6
+2,Deadlift,strength,"back,glutes,hamstrings",barbell,advanced,9
+3,Push-up,strength,"chest,triceps,shoulders",none,beginner,7
+4,Pull-up,strength,"back,biceps",pull_up_bar,intermediate,8
+5,Plank,strength,core,none,beginner,4
+6,Lunges,strength,"quadriceps,glutes",none,beginner,6
+7,Dumbbell Curl,strength,biceps,dumbbells,beginner,4
+8,Shoulder Press,strength,"shoulders,triceps",dumbbells,intermediate,5
+9,Lat Pulldown,strength,"back,biceps",machine,beginner,5
+10,Running,cardio,"legs,cardiovascular",none,beginner,10
+11,Cycling,cardio,"legs,cardiovascular",bike,beginner,8
+12,Burpees,cardio,full_body,none,intermediate,10
+13,Jumping Jacks,cardio,full_body,none,beginner,8
+14,Mountain Climbers,cardio,"core,legs",none,intermediate,9
+15,Rowing,cardio,"back,legs,cardiovascular",rowing_machine,intermediate,9
+16,Yoga Flow,flexibility,full_body,yoga_mat,beginner,3
+17,Static Stretching,flexibility,full_body,none,beginner,2

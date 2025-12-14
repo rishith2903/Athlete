@@ -308,6 +308,7 @@ class ModelTrainer:
         self.data_path = data_path
         self.model_save_path = model_save_path
         self.device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+        self.rating_predictor = None  # Will be initialized during training
         logger.info(f"Using device: {self.device}")
         
     def train(self, epochs: int = 50, batch_size: int = 32, learning_rate: float = 0.001):
@@ -369,17 +370,21 @@ class ModelTrainer:
                     
                     optimizer.zero_grad()
                     
-                    # Forward pass (simplified for training)
-                    # In practice, you'd use the full model forward method
-                    user_embeddings = model.user_encoder(
-                        user_features[:, 0],  # age
-                        user_features[:, 3:6].argmax(dim=1),  # gender
-                        user_features[:, 6:9].argmax(dim=1),  # fitness level
-                        user_features[:, 9:14].nonzero()[:, 1].view(-1, 1)  # goals
-                    )
+                    # Simplified forward pass - concatenate features and predict rating
+                    combined_features = torch.cat([user_features, exercise_features], dim=1)
                     
-                    # Get predictions (simplified)
-                    predictions = torch.sigmoid(user_embeddings.mean(dim=1))
+                    # Use a simple linear layer for prediction (dynamically sized)
+                    if self.rating_predictor is None:
+                        self.rating_predictor = nn.Sequential(
+                            nn.Linear(combined_features.shape[1], 64),
+                            nn.ReLU(),
+                            nn.Linear(64, 32),
+                            nn.ReLU(),
+                            nn.Linear(32, 1),
+                            nn.Sigmoid()
+                        ).to(self.device)
+                    
+                    predictions = self.rating_predictor(combined_features).squeeze()
                     
                     loss = criterion(predictions, targets)
                     loss.backward()
@@ -403,15 +408,9 @@ class ModelTrainer:
                         exercise_features = batch['exercise_features'].to(self.device)
                         targets = batch['target'].to(self.device)
                         
-                        # Forward pass (simplified)
-                        user_embeddings = model.user_encoder(
-                            user_features[:, 0],
-                            user_features[:, 3:6].argmax(dim=1),
-                            user_features[:, 6:9].argmax(dim=1),
-                            user_features[:, 9:14].nonzero()[:, 1].view(-1, 1)
-                        )
-                        
-                        predictions = torch.sigmoid(user_embeddings.mean(dim=1))
+                        # Simplified forward pass
+                        combined_features = torch.cat([user_features, exercise_features], dim=1)
+                        predictions = self.rating_predictor(combined_features).squeeze()
                         loss = criterion(predictions, targets)
                         
                         val_loss += loss.item()
