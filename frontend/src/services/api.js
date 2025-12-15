@@ -27,11 +27,31 @@ api.interceptors.request.use(
 api.interceptors.response.use(
   (response) => response,
   (error) => {
+    // Only handle 401 if we're on a protected route and the error is from an auth-protected endpoint
     if (error.response?.status === 401) {
-      // Unauthorized - clear token and redirect to login
-      localStorage.removeItem('authToken');
-      localStorage.removeItem('user');
-      window.location.href = '/login';
+      const currentPath = window.location.pathname;
+      const isPublicRoute = ['/login', '/signup', '/'].includes(currentPath);
+      const isAuthEndpoint = error.config?.url?.includes('/auth/');
+
+      // Don't redirect if:
+      // 1. Already on a public route
+      // 2. This is an auth endpoint (login/signup) - let component handle the error
+      // 3. We're already redirecting (check localStorage flag)
+      if (!isPublicRoute && !isAuthEndpoint && !sessionStorage.getItem('redirecting')) {
+        // Log for debugging
+        console.warn('API 401 error on:', error.config?.url);
+
+        // Only clear auth and redirect if there's no valid token or the token is definitely invalid
+        const token = localStorage.getItem('authToken');
+        if (!token) {
+          // No token, redirect to login
+          sessionStorage.setItem('redirecting', 'true');
+          localStorage.removeItem('authToken');
+          localStorage.removeItem('user');
+          window.location.href = '/login';
+        }
+        // If token exists, let the component handle the error (could be endpoint-specific auth issue)
+      }
     }
     return Promise.reject(error);
   }

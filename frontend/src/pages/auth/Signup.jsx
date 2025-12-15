@@ -1,13 +1,15 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { Eye, EyeOff, Mail, Lock, User, Loader2, Phone, Calendar } from 'lucide-react';
+import { Eye, EyeOff, Mail, Lock, User, Loader2, Phone, Calendar, Ruler, Scale, Sun, Moon } from 'lucide-react';
 import { useAuth } from '../../contexts/AuthContext';
+import { useTheme } from '../../contexts/ThemeContext';
 import { cn } from '../../lib/utils';
 
 const Signup = () => {
   const navigate = useNavigate();
   const { signup, loading } = useAuth();
+  const { isDark, toggleTheme } = useTheme();
   const [showPassword, setShowPassword] = useState(false);
   const [formData, setFormData] = useState({
     name: '',
@@ -16,7 +18,8 @@ const Signup = () => {
     confirmPassword: '',
     phone: '',
     dateOfBirth: '',
-    fitnessGoal: 'general',
+    weight: '',
+    height: '',
   });
   const [errors, setErrors] = useState({});
 
@@ -78,14 +81,25 @@ const Signup = () => {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-50 to-indigo-100 px-4 sm:px-6 lg:px-8 py-12">
+    <div className={cn(
+      "min-h-screen flex items-center justify-center px-4 sm:px-6 lg:px-8 py-12 relative transition-colors duration-300",
+      isDark ? "bg-gray-900" : "bg-gradient-to-br from-blue-50 to-indigo-100"
+    )}>
+      {/* Theme Toggle */}
+      <button
+        onClick={toggleTheme}
+        className="absolute top-4 right-4 p-3 rounded-full bg-white shadow-lg hover:shadow-xl transition-all duration-200 text-gray-600 hover:text-gray-800"
+        aria-label="Toggle theme"
+      >
+        {isDark ? <Sun className="h-5 w-5" /> : <Moon className="h-5 w-5" />}
+      </button>
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5 }}
         className="max-w-md w-full space-y-8"
       >
-        <div className="bg-white rounded-2xl shadow-xl p-8">
+        <div className="bg-white rounded-2xl shadow-xl p-8 text-gray-900" style={{ backgroundColor: 'white' }}>
           <div className="text-center">
             <motion.div
               initial={{ scale: 0 }}
@@ -117,10 +131,15 @@ const Signup = () => {
             <div className="space-y-4">
               <div>
                 <label htmlFor="name" className="label">
-                  Full Name
+                  Full Name <span className="text-red-500">*</span>
                 </label>
-                <div className="relative">
-                  <User className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 h-5 w-5 pointer-events-none" />
+                <div className="flex">
+                  <div className={cn(
+                    "flex items-center justify-center px-3 border border-r-0 rounded-l-lg",
+                    isDark ? "bg-gray-800 border-gray-600" : "bg-white border-gray-200"
+                  )}>
+                    <User className="text-gray-500 h-4 w-4" />
+                  </div>
                   <input
                     id="name"
                     name="name"
@@ -130,7 +149,7 @@ const Signup = () => {
                     value={formData.name}
                     onChange={handleChange}
                     className={cn(
-                      "input pl-12",
+                      "input rounded-l-none flex-1",
                       errors.name && "border-red-500 focus:ring-red-500"
                     )}
                     placeholder="Enter your full name"
@@ -143,10 +162,15 @@ const Signup = () => {
 
               <div>
                 <label htmlFor="email" className="label">
-                  Email Address
+                  Email Address <span className="text-red-500">*</span>
                 </label>
-                <div className="relative">
-                  <Mail className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 h-5 w-5 pointer-events-none" />
+                <div className="flex">
+                  <div className={cn(
+                    "flex items-center justify-center px-3 border border-r-0 rounded-l-lg",
+                    isDark ? "bg-gray-800 border-gray-600" : "bg-white border-gray-200"
+                  )}>
+                    <Mail className="text-gray-500 h-4 w-4" />
+                  </div>
                   <input
                     id="email"
                     name="email"
@@ -156,7 +180,7 @@ const Signup = () => {
                     value={formData.email}
                     onChange={handleChange}
                     className={cn(
-                      "input pl-12",
+                      "input rounded-l-none flex-1",
                       errors.email && "border-red-500 focus:ring-red-500"
                     )}
                     placeholder="Enter your email"
@@ -169,10 +193,15 @@ const Signup = () => {
 
               <div>
                 <label htmlFor="phone" className="label">
-                  Phone Number (Optional)
+                  Phone Number
                 </label>
-                <div className="relative">
-                  <Phone className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 h-5 w-5 pointer-events-none" />
+                <div className="flex">
+                  <div className={cn(
+                    "flex items-center justify-center px-3 border border-r-0 rounded-l-lg",
+                    isDark ? "bg-gray-800 border-gray-600" : "bg-white border-gray-200"
+                  )}>
+                    <Phone className="text-gray-500 h-4 w-4" />
+                  </div>
                   <input
                     id="phone"
                     name="phone"
@@ -180,7 +209,7 @@ const Signup = () => {
                     autoComplete="tel"
                     value={formData.phone}
                     onChange={handleChange}
-                    className="input pl-12"
+                    className="input rounded-l-none flex-1"
                     placeholder="Enter your phone number"
                   />
                 </div>
@@ -188,10 +217,15 @@ const Signup = () => {
 
               <div>
                 <label htmlFor="dateOfBirth" className="label">
-                  Date of Birth
+                  Date of Birth <span className="text-red-500">*</span>
                 </label>
-                <div className="relative">
-                  <Calendar className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 h-5 w-5 pointer-events-none" />
+                <div className="flex">
+                  <div className={cn(
+                    "flex items-center justify-center px-3 border border-r-0 rounded-l-lg",
+                    isDark ? "bg-gray-800 border-gray-600" : "bg-white border-gray-200"
+                  )}>
+                    <Calendar className="text-gray-500 h-4 w-4" />
+                  </div>
                   <input
                     id="dateOfBirth"
                     name="dateOfBirth"
@@ -200,7 +234,7 @@ const Signup = () => {
                     value={formData.dateOfBirth}
                     onChange={handleChange}
                     className={cn(
-                      "input pl-12",
+                      "input rounded-l-none flex-1",
                       errors.dateOfBirth && "border-red-500 focus:ring-red-500"
                     )}
                   />
@@ -210,56 +244,97 @@ const Signup = () => {
                 )}
               </div>
 
-              <div>
-                <label htmlFor="fitnessGoal" className="label">
-                  Fitness Goal
-                </label>
-                <select
-                  id="fitnessGoal"
-                  name="fitnessGoal"
-                  value={formData.fitnessGoal}
-                  onChange={handleChange}
-                  className="input"
-                >
-                  <option value="general">General Fitness</option>
-                  <option value="weight_loss">Weight Loss</option>
-                  <option value="muscle_gain">Muscle Gain</option>
-                  <option value="endurance">Endurance</option>
-                  <option value="strength">Strength Training</option>
-                </select>
+              {/* Weight and Height - Optional */}
+              <div className="grid grid-cols-2 gap-4">
+                <div>
+                  <label htmlFor="weight" className="label">
+                    Weight (kg)
+                  </label>
+                  <div className="flex">
+                    <div className={cn(
+                      "flex items-center justify-center px-3 border border-r-0 rounded-l-lg",
+                      isDark ? "bg-gray-800 border-gray-600" : "bg-white border-gray-200"
+                    )}>
+                      <Scale className="text-gray-500 h-4 w-4" />
+                    </div>
+                    <input
+                      id="weight"
+                      name="weight"
+                      type="number"
+                      step="0.1"
+                      min="0"
+                      value={formData.weight}
+                      onChange={handleChange}
+                      className="input rounded-l-none flex-1"
+                      placeholder="e.g. 70"
+                    />
+                  </div>
+                </div>
+
+                <div>
+                  <label htmlFor="height" className="label">
+                    Height (cm)
+                  </label>
+                  <div className="flex">
+                    <div className={cn(
+                      "flex items-center justify-center px-3 border border-r-0 rounded-l-lg",
+                      isDark ? "bg-gray-800 border-gray-600" : "bg-white border-gray-200"
+                    )}>
+                      <Ruler className="text-gray-500 h-4 w-4" />
+                    </div>
+                    <input
+                      id="height"
+                      name="height"
+                      type="number"
+                      step="0.1"
+                      min="0"
+                      value={formData.height}
+                      onChange={handleChange}
+                      className="input rounded-l-none flex-1"
+                      placeholder="e.g. 175"
+                    />
+                  </div>
+                </div>
               </div>
 
               <div>
                 <label htmlFor="password" className="label">
-                  Password
+                  Password <span className="text-red-500">*</span>
                 </label>
-                <div className="relative">
-                  <Lock className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 h-5 w-5 pointer-events-none" />
-                  <input
-                    id="password"
-                    name="password"
-                    type={showPassword ? "text" : "password"}
-                    autoComplete="new-password"
-                    required
-                    value={formData.password}
-                    onChange={handleChange}
-                    className={cn(
-                      "input pl-12 pr-12",
-                      errors.password && "border-red-500 focus:ring-red-500"
-                    )}
-                    placeholder="Create a password"
-                  />
-                  <button
-                    type="button"
-                    onClick={() => setShowPassword(!showPassword)}
-                    className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 transition-colors"
-                  >
-                    {showPassword ? (
-                      <EyeOff className="h-5 w-5" />
-                    ) : (
-                      <Eye className="h-5 w-5" />
-                    )}
-                  </button>
+                <div className="flex">
+                  <div className={cn(
+                    "flex items-center justify-center px-3 border border-r-0 rounded-l-lg",
+                    isDark ? "bg-gray-800 border-gray-600" : "bg-white border-gray-200"
+                  )}>
+                    <Lock className="text-gray-500 h-4 w-4" />
+                  </div>
+                  <div className="relative flex-1">
+                    <input
+                      id="password"
+                      name="password"
+                      type={showPassword ? "text" : "password"}
+                      autoComplete="new-password"
+                      required
+                      value={formData.password}
+                      onChange={handleChange}
+                      className={cn(
+                        "input rounded-l-none w-full pr-12",
+                        errors.password && "border-red-500 focus:ring-red-500"
+                      )}
+                      placeholder="Create a password"
+                    />
+                    <button
+                      type="button"
+                      onClick={() => setShowPassword(!showPassword)}
+                      className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 transition-colors"
+                    >
+                      {showPassword ? (
+                        <EyeOff className="h-5 w-5" />
+                      ) : (
+                        <Eye className="h-5 w-5" />
+                      )}
+                    </button>
+                  </div>
                 </div>
                 {errors.password && (
                   <p className="mt-1 text-sm text-red-600">{errors.password}</p>
@@ -268,10 +343,15 @@ const Signup = () => {
 
               <div>
                 <label htmlFor="confirmPassword" className="label">
-                  Confirm Password
+                  Confirm Password <span className="text-red-500">*</span>
                 </label>
-                <div className="relative">
-                  <Lock className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 h-5 w-5 pointer-events-none" />
+                <div className="flex">
+                  <div className={cn(
+                    "flex items-center justify-center px-3 border border-r-0 rounded-l-lg",
+                    isDark ? "bg-gray-800 border-gray-600" : "bg-white border-gray-200"
+                  )}>
+                    <Lock className="text-gray-500 h-4 w-4" />
+                  </div>
                   <input
                     id="confirmPassword"
                     name="confirmPassword"
@@ -281,7 +361,7 @@ const Signup = () => {
                     value={formData.confirmPassword}
                     onChange={handleChange}
                     className={cn(
-                      "input pl-12",
+                      "input rounded-l-none flex-1",
                       errors.confirmPassword && "border-red-500 focus:ring-red-500"
                     )}
                     placeholder="Confirm your password"
