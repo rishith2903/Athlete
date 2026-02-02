@@ -1,0 +1,1100 @@
+{
+    "metadata": {
+        "version": "2.0",
+        "total_exercises": 50,
+        "skill_levels": [
+            "beginner",
+            "intermediate",
+            "expert"
+        ],
+        "rating_scale": {
+            "1_star": [
+                0,
+                40
+            ],
+            "2_star": [
+                40,
+                55
+            ],
+            "3_star": [
+                55,
+                70
+            ],
+            "4_star": [
+                70,
+                85
+            ],
+            "5_star": [
+                85,
+                100
+            ]
+        }
+    },
+    "exercises": {
+        "barbell_squat": {
+            "name": "Barbell Squat",
+            "category": "legs",
+            "primary_muscles": [
+                "quadriceps",
+                "glutes"
+            ],
+            "key_joints": [
+                "left_knee",
+                "right_knee",
+                "left_hip",
+                "right_hip",
+                "spine"
+            ],
+            "skill_levels": {
+                "beginner": {
+                    "knee_angle": {
+                        "min": 60,
+                        "max": 120,
+                        "ideal": 90
+                    },
+                    "hip_angle": {
+                        "min": 50,
+                        "max": 110,
+                        "ideal": 80
+                    },
+                    "back_angle": {
+                        "min": 35,
+                        "max": 85,
+                        "ideal": 60
+                    },
+                    "tolerance": 20
+                },
+                "intermediate": {
+                    "knee_angle": {
+                        "min": 70,
+                        "max": 105,
+                        "ideal": 90
+                    },
+                    "hip_angle": {
+                        "min": 60,
+                        "max": 95,
+                        "ideal": 80
+                    },
+                    "back_angle": {
+                        "min": 45,
+                        "max": 75,
+                        "ideal": 60
+                    },
+                    "tolerance": 12
+                },
+                "expert": {
+                    "knee_angle": {
+                        "min": 80,
+                        "max": 100,
+                        "ideal": 90
+                    },
+                    "hip_angle": {
+                        "min": 70,
+                        "max": 90,
+                        "ideal": 80
+                    },
+                    "back_angle": {
+                        "min": 50,
+                        "max": 70,
+                        "ideal": 60
+                    },
+                    "tolerance": 7
+                }
+            },
+            "common_mistakes": [
+                {
+                    "id": "knees_caving",
+                    "check": "knee_valgus > 10",
+                    "feedback": "Knees caving inward by {deviation}°. Push knees out over toes."
+                },
+                {
+                    "id": "shallow_depth",
+                    "check": "hip_angle > ideal + 20",
+                    "feedback": "Squat depth insufficient. Go lower until thighs are parallel."
+                },
+                {
+                    "id": "forward_lean",
+                    "check": "back_angle < ideal - 15",
+                    "feedback": "Excessive forward lean ({angle}°). Keep chest up."
+                },
+                {
+                    "id": "heels_rising",
+                    "check": "ankle_dorsiflexion < 10",
+                    "feedback": "Heels lifting. Keep feet flat, weight on heels."
+                }
+            ],
+            "tips": [
+                "Keep core tight",
+                "Drive through heels",
+                "Chest up, eyes forward"
+            ]
+        },
+        "barbell_deadlift": {
+            "name": "Barbell Deadlift",
+            "category": "back",
+            "primary_muscles": [
+                "lower_back",
+                "glutes",
+                "hamstrings"
+            ],
+            "key_joints": [
+                "left_hip",
+                "right_hip",
+                "spine",
+                "left_knee",
+                "right_knee"
+            ],
+            "skill_levels": {
+                "beginner": {
+                    "hip_hinge": {
+                        "min": 30,
+                        "max": 60,
+                        "ideal": 45
+                    },
+                    "back_angle": {
+                        "min": 150,
+                        "max": 180,
+                        "ideal": 170
+                    },
+                    "knee_angle": {
+                        "min": 145,
+                        "max": 180,
+                        "ideal": 165
+                    },
+                    "tolerance": 18
+                },
+                "intermediate": {
+                    "hip_hinge": {
+                        "min": 35,
+                        "max": 55,
+                        "ideal": 45
+                    },
+                    "back_angle": {
+                        "min": 160,
+                        "max": 180,
+                        "ideal": 170
+                    },
+                    "knee_angle": {
+                        "min": 155,
+                        "max": 175,
+                        "ideal": 165
+                    },
+                    "tolerance": 10
+                },
+                "expert": {
+                    "hip_hinge": {
+                        "min": 40,
+                        "max": 50,
+                        "ideal": 45
+                    },
+                    "back_angle": {
+                        "min": 165,
+                        "max": 180,
+                        "ideal": 170
+                    },
+                    "knee_angle": {
+                        "min": 160,
+                        "max": 170,
+                        "ideal": 165
+                    },
+                    "tolerance": 5
+                }
+            },
+            "common_mistakes": [
+                {
+                    "id": "rounded_back",
+                    "check": "back_angle < 160",
+                    "feedback": "Back rounding detected ({angle}°). Keep spine neutral at 170°+."
+                },
+                {
+                    "id": "bar_drift",
+                    "check": "bar_path_deviation > 5",
+                    "feedback": "Bar drifting forward. Keep bar close to body."
+                }
+            ],
+            "tips": [
+                "Hinge at hips",
+                "Bar stays close",
+                "Squeeze glutes at top"
+            ]
+        },
+        "pushup": {
+            "name": "Push-Up",
+            "category": "chest",
+            "primary_muscles": [
+                "pectorals",
+                "triceps",
+                "deltoids"
+            ],
+            "key_joints": [
+                "left_elbow",
+                "right_elbow",
+                "left_shoulder",
+                "right_shoulder",
+                "spine"
+            ],
+            "skill_levels": {
+                "beginner": {
+                    "elbow_angle_down": {
+                        "min": 70,
+                        "max": 110,
+                        "ideal": 90
+                    },
+                    "elbow_angle_up": {
+                        "min": 155,
+                        "max": 180,
+                        "ideal": 175
+                    },
+                    "body_alignment": {
+                        "min": 160,
+                        "max": 180,
+                        "ideal": 175
+                    },
+                    "tolerance": 18
+                },
+                "intermediate": {
+                    "elbow_angle_down": {
+                        "min": 80,
+                        "max": 100,
+                        "ideal": 90
+                    },
+                    "elbow_angle_up": {
+                        "min": 165,
+                        "max": 180,
+                        "ideal": 175
+                    },
+                    "body_alignment": {
+                        "min": 168,
+                        "max": 180,
+                        "ideal": 175
+                    },
+                    "tolerance": 10
+                },
+                "expert": {
+                    "elbow_angle_down": {
+                        "min": 85,
+                        "max": 95,
+                        "ideal": 90
+                    },
+                    "elbow_angle_up": {
+                        "min": 170,
+                        "max": 180,
+                        "ideal": 175
+                    },
+                    "body_alignment": {
+                        "min": 172,
+                        "max": 180,
+                        "ideal": 175
+                    },
+                    "tolerance": 5
+                }
+            },
+            "common_mistakes": [
+                {
+                    "id": "sagging_hips",
+                    "check": "body_alignment < 165",
+                    "feedback": "Hips sagging ({angle}°). Engage core, maintain straight line."
+                },
+                {
+                    "id": "flared_elbows",
+                    "check": "elbow_flare > 60",
+                    "feedback": "Elbows flaring out. Keep elbows at 45° from body."
+                },
+                {
+                    "id": "incomplete_rom",
+                    "check": "elbow_angle_down > 100",
+                    "feedback": "Incomplete range. Lower chest closer to floor."
+                }
+            ],
+            "tips": [
+                "Body straight line",
+                "Elbows 45° from body",
+                "Full range of motion"
+            ]
+        },
+        "plank": {
+            "name": "Plank",
+            "category": "core",
+            "primary_muscles": [
+                "core",
+                "shoulders"
+            ],
+            "key_joints": [
+                "spine",
+                "left_hip",
+                "right_hip",
+                "left_shoulder",
+                "right_shoulder"
+            ],
+            "skill_levels": {
+                "beginner": {
+                    "body_alignment": {
+                        "min": 160,
+                        "max": 180,
+                        "ideal": 175
+                    },
+                    "hip_drop": {
+                        "min": -15,
+                        "max": 15,
+                        "ideal": 0
+                    },
+                    "tolerance": 15
+                },
+                "intermediate": {
+                    "body_alignment": {
+                        "min": 168,
+                        "max": 180,
+                        "ideal": 175
+                    },
+                    "hip_drop": {
+                        "min": -8,
+                        "max": 8,
+                        "ideal": 0
+                    },
+                    "tolerance": 8
+                },
+                "expert": {
+                    "body_alignment": {
+                        "min": 172,
+                        "max": 180,
+                        "ideal": 175
+                    },
+                    "hip_drop": {
+                        "min": -5,
+                        "max": 5,
+                        "ideal": 0
+                    },
+                    "tolerance": 4
+                }
+            },
+            "common_mistakes": [
+                {
+                    "id": "hips_sagging",
+                    "check": "hip_drop > 10",
+                    "feedback": "Hips sagging by {deviation}°. Engage glutes and core."
+                },
+                {
+                    "id": "hips_piked",
+                    "check": "hip_drop < -10",
+                    "feedback": "Hips too high ({deviation}°). Lower to straight line."
+                }
+            ],
+            "tips": [
+                "Engage core",
+                "Neutral spine",
+                "Breathe steadily"
+            ]
+        },
+        "lunge": {
+            "name": "Lunge",
+            "category": "legs",
+            "primary_muscles": [
+                "quadriceps",
+                "glutes",
+                "hamstrings"
+            ],
+            "key_joints": [
+                "left_knee",
+                "right_knee",
+                "left_hip",
+                "right_hip",
+                "spine"
+            ],
+            "skill_levels": {
+                "beginner": {
+                    "front_knee": {
+                        "min": 75,
+                        "max": 105,
+                        "ideal": 90
+                    },
+                    "back_knee": {
+                        "min": 75,
+                        "max": 105,
+                        "ideal": 90
+                    },
+                    "torso": {
+                        "min": 165,
+                        "max": 180,
+                        "ideal": 175
+                    },
+                    "tolerance": 15
+                },
+                "intermediate": {
+                    "front_knee": {
+                        "min": 82,
+                        "max": 98,
+                        "ideal": 90
+                    },
+                    "back_knee": {
+                        "min": 82,
+                        "max": 98,
+                        "ideal": 90
+                    },
+                    "torso": {
+                        "min": 170,
+                        "max": 180,
+                        "ideal": 175
+                    },
+                    "tolerance": 8
+                },
+                "expert": {
+                    "front_knee": {
+                        "min": 87,
+                        "max": 93,
+                        "ideal": 90
+                    },
+                    "back_knee": {
+                        "min": 87,
+                        "max": 93,
+                        "ideal": 90
+                    },
+                    "torso": {
+                        "min": 173,
+                        "max": 180,
+                        "ideal": 175
+                    },
+                    "tolerance": 4
+                }
+            },
+            "common_mistakes": [
+                {
+                    "id": "knee_over_toe",
+                    "check": "knee_forward > 10",
+                    "feedback": "Front knee too far forward. Keep knee over ankle."
+                },
+                {
+                    "id": "torso_lean",
+                    "check": "torso < 170",
+                    "feedback": "Torso leaning forward ({angle}°). Stay upright."
+                }
+            ],
+            "tips": [
+                "Knee over ankle",
+                "Upright torso",
+                "Step far enough"
+            ]
+        },
+        "bench_press": {
+            "name": "Bench Press",
+            "category": "chest",
+            "primary_muscles": [
+                "pectorals",
+                "triceps",
+                "anterior_deltoids"
+            ],
+            "key_joints": [
+                "left_elbow",
+                "right_elbow",
+                "left_shoulder",
+                "right_shoulder",
+                "left_wrist",
+                "right_wrist"
+            ],
+            "skill_levels": {
+                "beginner": {
+                    "elbow_angle_down": {
+                        "min": 75,
+                        "max": 105,
+                        "ideal": 90
+                    },
+                    "wrist_alignment": {
+                        "min": -15,
+                        "max": 15,
+                        "ideal": 0
+                    },
+                    "bar_path": {
+                        "min": -10,
+                        "max": 10,
+                        "ideal": 0
+                    },
+                    "tolerance": 15
+                },
+                "intermediate": {
+                    "elbow_angle_down": {
+                        "min": 82,
+                        "max": 98,
+                        "ideal": 90
+                    },
+                    "wrist_alignment": {
+                        "min": -8,
+                        "max": 8,
+                        "ideal": 0
+                    },
+                    "bar_path": {
+                        "min": -5,
+                        "max": 5,
+                        "ideal": 0
+                    },
+                    "tolerance": 8
+                },
+                "expert": {
+                    "elbow_angle_down": {
+                        "min": 87,
+                        "max": 93,
+                        "ideal": 90
+                    },
+                    "wrist_alignment": {
+                        "min": -5,
+                        "max": 5,
+                        "ideal": 0
+                    },
+                    "bar_path": {
+                        "min": -3,
+                        "max": 3,
+                        "ideal": 0
+                    },
+                    "tolerance": 4
+                }
+            },
+            "common_mistakes": [
+                {
+                    "id": "wrist_bent",
+                    "check": "wrist_alignment > 10",
+                    "feedback": "Wrist bending back {deviation}°. Keep wrists straight at 0°."
+                },
+                {
+                    "id": "bar_bounce",
+                    "check": "bar_velocity_bottom > threshold",
+                    "feedback": "Bouncing bar off chest. Control the descent."
+                }
+            ],
+            "tips": [
+                "Wrists straight",
+                "Retract shoulders",
+                "Arch upper back"
+            ]
+        },
+        "bent_over_row": {
+            "name": "Bent Over Row",
+            "category": "back",
+            "primary_muscles": [
+                "latissimus_dorsi",
+                "rhomboids",
+                "biceps"
+            ],
+            "key_joints": [
+                "left_elbow",
+                "right_elbow",
+                "spine",
+                "left_hip",
+                "right_hip"
+            ],
+            "skill_levels": {
+                "beginner": {
+                    "back_angle": {
+                        "min": 35,
+                        "max": 60,
+                        "ideal": 45
+                    },
+                    "elbow_angle_top": {
+                        "min": 75,
+                        "max": 105,
+                        "ideal": 90
+                    },
+                    "spine_neutral": {
+                        "min": 165,
+                        "max": 180,
+                        "ideal": 175
+                    },
+                    "tolerance": 15
+                },
+                "intermediate": {
+                    "back_angle": {
+                        "min": 40,
+                        "max": 55,
+                        "ideal": 45
+                    },
+                    "elbow_angle_top": {
+                        "min": 82,
+                        "max": 98,
+                        "ideal": 90
+                    },
+                    "spine_neutral": {
+                        "min": 170,
+                        "max": 180,
+                        "ideal": 175
+                    },
+                    "tolerance": 8
+                },
+                "expert": {
+                    "back_angle": {
+                        "min": 42,
+                        "max": 48,
+                        "ideal": 45
+                    },
+                    "elbow_angle_top": {
+                        "min": 87,
+                        "max": 93,
+                        "ideal": 90
+                    },
+                    "spine_neutral": {
+                        "min": 173,
+                        "max": 180,
+                        "ideal": 175
+                    },
+                    "tolerance": 4
+                }
+            },
+            "common_mistakes": [
+                {
+                    "id": "rounded_back",
+                    "check": "spine_neutral < 165",
+                    "feedback": "Back rounding ({angle}°). Maintain neutral spine."
+                },
+                {
+                    "id": "using_momentum",
+                    "check": "hip_movement > 10",
+                    "feedback": "Using momentum. Keep hips stationary, pull with back."
+                }
+            ],
+            "tips": [
+                "Neutral spine",
+                "Pull to hip",
+                "Squeeze shoulder blades"
+            ]
+        },
+        "shoulder_press": {
+            "name": "Overhead Shoulder Press",
+            "category": "shoulders",
+            "primary_muscles": [
+                "deltoids",
+                "triceps",
+                "upper_chest"
+            ],
+            "key_joints": [
+                "left_elbow",
+                "right_elbow",
+                "left_shoulder",
+                "right_shoulder",
+                "spine"
+            ],
+            "skill_levels": {
+                "beginner": {
+                    "elbow_angle_bottom": {
+                        "min": 75,
+                        "max": 105,
+                        "ideal": 90
+                    },
+                    "elbow_angle_top": {
+                        "min": 165,
+                        "max": 180,
+                        "ideal": 175
+                    },
+                    "spine_alignment": {
+                        "min": 170,
+                        "max": 180,
+                        "ideal": 180
+                    },
+                    "tolerance": 15
+                },
+                "intermediate": {
+                    "elbow_angle_bottom": {
+                        "min": 82,
+                        "max": 98,
+                        "ideal": 90
+                    },
+                    "elbow_angle_top": {
+                        "min": 170,
+                        "max": 180,
+                        "ideal": 175
+                    },
+                    "spine_alignment": {
+                        "min": 175,
+                        "max": 180,
+                        "ideal": 180
+                    },
+                    "tolerance": 8
+                },
+                "expert": {
+                    "elbow_angle_bottom": {
+                        "min": 87,
+                        "max": 93,
+                        "ideal": 90
+                    },
+                    "elbow_angle_top": {
+                        "min": 173,
+                        "max": 180,
+                        "ideal": 175
+                    },
+                    "spine_alignment": {
+                        "min": 178,
+                        "max": 180,
+                        "ideal": 180
+                    },
+                    "tolerance": 4
+                }
+            },
+            "common_mistakes": [
+                {
+                    "id": "back_arch",
+                    "check": "spine_alignment < 175",
+                    "feedback": "Excessive back arch ({deviation}°). Keep core tight, spine neutral."
+                },
+                {
+                    "id": "incomplete_lockout",
+                    "check": "elbow_angle_top < 170",
+                    "feedback": "Arms not fully extended at top ({angle}°). Full lockout needed."
+                }
+            ],
+            "tips": [
+                "Core braced",
+                "Press overhead",
+                "Full lockout"
+            ]
+        },
+        "bicep_curl": {
+            "name": "Bicep Curl",
+            "category": "arms",
+            "primary_muscles": [
+                "biceps",
+                "forearms"
+            ],
+            "key_joints": [
+                "left_elbow",
+                "right_elbow",
+                "left_wrist",
+                "right_wrist",
+                "left_shoulder",
+                "right_shoulder"
+            ],
+            "skill_levels": {
+                "beginner": {
+                    "elbow_angle_top": {
+                        "min": 25,
+                        "max": 50,
+                        "ideal": 35
+                    },
+                    "elbow_angle_bottom": {
+                        "min": 160,
+                        "max": 180,
+                        "ideal": 175
+                    },
+                    "shoulder_movement": {
+                        "min": -10,
+                        "max": 10,
+                        "ideal": 0
+                    },
+                    "tolerance": 15
+                },
+                "intermediate": {
+                    "elbow_angle_top": {
+                        "min": 30,
+                        "max": 45,
+                        "ideal": 35
+                    },
+                    "elbow_angle_bottom": {
+                        "min": 168,
+                        "max": 180,
+                        "ideal": 175
+                    },
+                    "shoulder_movement": {
+                        "min": -5,
+                        "max": 5,
+                        "ideal": 0
+                    },
+                    "tolerance": 8
+                },
+                "expert": {
+                    "elbow_angle_top": {
+                        "min": 32,
+                        "max": 40,
+                        "ideal": 35
+                    },
+                    "elbow_angle_bottom": {
+                        "min": 172,
+                        "max": 180,
+                        "ideal": 175
+                    },
+                    "shoulder_movement": {
+                        "min": -3,
+                        "max": 3,
+                        "ideal": 0
+                    },
+                    "tolerance": 4
+                }
+            },
+            "common_mistakes": [
+                {
+                    "id": "swinging",
+                    "check": "shoulder_movement > 8",
+                    "feedback": "Using momentum ({deviation}°). Keep elbows stationary."
+                },
+                {
+                    "id": "partial_rom",
+                    "check": "elbow_angle_bottom < 165",
+                    "feedback": "Incomplete extension. Fully straighten arms at bottom."
+                }
+            ],
+            "tips": [
+                "Elbows pinned",
+                "Full range",
+                "Control the negative"
+            ]
+        },
+        "tricep_dip": {
+            "name": "Tricep Dip",
+            "category": "arms",
+            "primary_muscles": [
+                "triceps",
+                "chest",
+                "shoulders"
+            ],
+            "key_joints": [
+                "left_elbow",
+                "right_elbow",
+                "left_shoulder",
+                "right_shoulder"
+            ],
+            "skill_levels": {
+                "beginner": {
+                    "elbow_angle_bottom": {
+                        "min": 75,
+                        "max": 105,
+                        "ideal": 90
+                    },
+                    "elbow_angle_top": {
+                        "min": 165,
+                        "max": 180,
+                        "ideal": 175
+                    },
+                    "torso_lean": {
+                        "min": -15,
+                        "max": 15,
+                        "ideal": 0
+                    },
+                    "tolerance": 15
+                },
+                "intermediate": {
+                    "elbow_angle_bottom": {
+                        "min": 82,
+                        "max": 98,
+                        "ideal": 90
+                    },
+                    "elbow_angle_top": {
+                        "min": 170,
+                        "max": 180,
+                        "ideal": 175
+                    },
+                    "torso_lean": {
+                        "min": -8,
+                        "max": 8,
+                        "ideal": 0
+                    },
+                    "tolerance": 8
+                },
+                "expert": {
+                    "elbow_angle_bottom": {
+                        "min": 87,
+                        "max": 93,
+                        "ideal": 90
+                    },
+                    "elbow_angle_top": {
+                        "min": 173,
+                        "max": 180,
+                        "ideal": 175
+                    },
+                    "torso_lean": {
+                        "min": -5,
+                        "max": 5,
+                        "ideal": 0
+                    },
+                    "tolerance": 4
+                }
+            },
+            "common_mistakes": [
+                {
+                    "id": "shallow_dip",
+                    "check": "elbow_angle_bottom > 100",
+                    "feedback": "Not going deep enough ({angle}°). Lower to 90°."
+                },
+                {
+                    "id": "flared_elbows",
+                    "check": "elbow_flare > 30",
+                    "feedback": "Elbows flaring out. Keep elbows tucked back."
+                }
+            ],
+            "tips": [
+                "Elbows back",
+                "90° depth",
+                "Full lockout"
+            ]
+        },
+        "pull_up": {
+            "name": "Pull-Up",
+            "category": "back",
+            "primary_muscles": [
+                "latissimus_dorsi",
+                "biceps",
+                "rhomboids"
+            ],
+            "key_joints": [
+                "left_elbow",
+                "right_elbow",
+                "left_shoulder",
+                "right_shoulder"
+            ],
+            "skill_levels": {
+                "beginner": {
+                    "elbow_angle_top": {
+                        "min": 25,
+                        "max": 55,
+                        "ideal": 40
+                    },
+                    "elbow_angle_bottom": {
+                        "min": 165,
+                        "max": 180,
+                        "ideal": 175
+                    },
+                    "chin_over_bar": {
+                        "min": 0,
+                        "max": 1,
+                        "ideal": 1
+                    },
+                    "tolerance": 18
+                },
+                "intermediate": {
+                    "elbow_angle_top": {
+                        "min": 30,
+                        "max": 50,
+                        "ideal": 40
+                    },
+                    "elbow_angle_bottom": {
+                        "min": 170,
+                        "max": 180,
+                        "ideal": 175
+                    },
+                    "chin_over_bar": {
+                        "min": 0,
+                        "max": 1,
+                        "ideal": 1
+                    },
+                    "tolerance": 10
+                },
+                "expert": {
+                    "elbow_angle_top": {
+                        "min": 35,
+                        "max": 45,
+                        "ideal": 40
+                    },
+                    "elbow_angle_bottom": {
+                        "min": 173,
+                        "max": 180,
+                        "ideal": 175
+                    },
+                    "chin_over_bar": {
+                        "min": 0,
+                        "max": 1,
+                        "ideal": 1
+                    },
+                    "tolerance": 5
+                }
+            },
+            "common_mistakes": [
+                {
+                    "id": "kipping",
+                    "check": "hip_swing > 15",
+                    "feedback": "Using momentum. Control the movement."
+                },
+                {
+                    "id": "partial_rom",
+                    "check": "elbow_angle_bottom < 165",
+                    "feedback": "Not fully extending arms. Full hang at bottom."
+                }
+            ],
+            "tips": [
+                "Full extension",
+                "Chin over bar",
+                "Control descent"
+            ]
+        },
+        "romanian_deadlift": {
+            "name": "Romanian Deadlift",
+            "category": "legs",
+            "primary_muscles": [
+                "hamstrings",
+                "glutes",
+                "lower_back"
+            ],
+            "key_joints": [
+                "left_hip",
+                "right_hip",
+                "spine",
+                "left_knee",
+                "right_knee"
+            ],
+            "skill_levels": {
+                "beginner": {
+                    "hip_hinge": {
+                        "min": 55,
+                        "max": 90,
+                        "ideal": 75
+                    },
+                    "knee_angle": {
+                        "min": 160,
+                        "max": 180,
+                        "ideal": 170
+                    },
+                    "spine_neutral": {
+                        "min": 160,
+                        "max": 180,
+                        "ideal": 175
+                    },
+                    "tolerance": 15
+                },
+                "intermediate": {
+                    "hip_hinge": {
+                        "min": 65,
+                        "max": 85,
+                        "ideal": 75
+                    },
+                    "knee_angle": {
+                        "min": 165,
+                        "max": 178,
+                        "ideal": 170
+                    },
+                    "spine_neutral": {
+                        "min": 168,
+                        "max": 180,
+                        "ideal": 175
+                    },
+                    "tolerance": 8
+                },
+                "expert": {
+                    "hip_hinge": {
+                        "min": 70,
+                        "max": 80,
+                        "ideal": 75
+                    },
+                    "knee_angle": {
+                        "min": 168,
+                        "max": 175,
+                        "ideal": 170
+                    },
+                    "spine_neutral": {
+                        "min": 172,
+                        "max": 180,
+                        "ideal": 175
+                    },
+                    "tolerance": 4
+                }
+            },
+            "common_mistakes": [
+                {
+                    "id": "rounded_back",
+                    "check": "spine_neutral < 165",
+                    "feedback": "Back rounding ({angle}°). Maintain neutral spine."
+                },
+                {
+                    "id": "bent_knees",
+                    "check": "knee_angle < 160",
+                    "feedback": "Knees too bent ({angle}°). Keep legs nearly straight."
+                }
+            ],
+            "tips": [
+                "Slight knee bend",
+                "Push hips back",
+                "Feel hamstring stretch"
+            ]
+        }
+    }
+}

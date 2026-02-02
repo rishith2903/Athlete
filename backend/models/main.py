@@ -11,6 +11,25 @@ import numpy as np
 from datetime import datetime
 import os
 
+# Lazy load MediaPipe to avoid startup issues
+mp_pose = None
+pose_detector = None
+
+def get_pose_detector():
+    global mp_pose, pose_detector
+    if pose_detector is None:
+        import cv2
+        import mediapipe as mp
+        from io import BytesIO
+        from PIL import Image
+        mp_pose = mp.solutions.pose
+        pose_detector = mp_pose.Pose(
+            static_image_mode=True,
+            model_complexity=1,
+            min_detection_confidence=0.5
+        )
+    return pose_detector
+
 app = FastAPI(
     title="AIthlete AI Services",
     description="Combined AI services for workout, nutrition, pose, and chatbot",
@@ -232,28 +251,182 @@ async def generate_meal_plan(request: NutritionRequest):
 
 @app.post("/pose/analyze")
 async def analyze_pose(file: UploadFile = File(...), exercise_type: str = "squat"):
-    """Analyze exercise form from image/video"""
+    """Analyze exercise form from image using MediaPipe"""
     try:
-        # Simulated pose analysis response
-        analysis = {
-            "overallScore": round(np.random.uniform(75, 95), 1),
-            "formAnalysis": {
-                "kneeAngle": round(np.random.uniform(85, 100), 1),
-                "hipAlignment": "good" if np.random.random() > 0.3 else "needs_improvement",
-                "spineNeutrality": round(np.random.uniform(0.8, 0.98), 2),
-                "shoulderPosition": "aligned"
-            },
-            "corrections": [],
-            "injuryRisk": "low"
-        }
+        import cv2
+        from io import BytesIO
+        from PIL import Image
         
-        # Add corrections based on simulated analysis
-        if analysis["formAnalysis"]["hipAlignment"] == "needs_improvement":
-            analysis["corrections"].append("Keep your hips aligned with your shoulders")
-        if analysis["formAnalysis"]["kneeAngle"] < 90:
-            analysis["corrections"].append("Bend your knees to at least 90 degrees")
-        if not analysis["corrections"]:
-            analysis["corrections"].append("Great form! Keep it up!")
+        # Get lazy-loaded pose detector
+        detector = get_pose_detector()
+        
+        # Read image from upload
+        contents = await file.read()
+        image = Image.open(BytesIO(contents))
+        image_np = np.array(image)
+        
+        # Convert RGB for MediaPipe
+        if len(image_np.shape) == 3 and image_np.shape[2] == 3:
+            image_rgb = cv2.cvtColor(image_np, cv2.COLOR_RGB2BGR)
+            image_rgb = cv2.cvtColor(image_rgb, cv2.COLOR_BGR2RGB)
+        else:
+            image_rgb = image_np
+        
+        # Detect pose
+        results = detector.process(image_rgb)
+        
+        if not results.pose_landmarks:
+            return {
+                "success": True,
+                "exerciseType": exercise_type,
+                "analysis": {
+                    "overallScore": 0,
+                    "formAnalysis": {},
+                    "corrections": ["No pose detected. Please ensure your full body is visible."],
+                    "injuryRisk": "unknown"
+                },
+                "timestamp": datetime.now().isoformat()
+            }
+        
+        # Extract landmarks
+        landmarks = results.pose_landmarks.landmark
+        
+        # Calculate joint angles
+        def calculate_angle(a, b, c):
+            """Calculate angle between three points"""
+            a = np.array([a.x, a.y])
+            b = np.array([b.x, b.y])
+            c = np.array([c.x, c.y])
+            radians = np.arctan2(c[1]-b[1], c[0]-b[0]) - np.arctan2(a[1]-b[1], a[0]-b[0])
+            angle = np.abs(radians * 180.0 / np.pi)
+            if angle > 180.0:
+                angle = 360 - angle
+            return round(angle, 1)
+        
+        # Key joint indices from MediaPipe
+        LEFT_HIP, LEFT_KNEE, LEFT_ANKLE = 23, 25, 27
+        RIGHT_HIP, RIGHT_KNEE, RIGHT_ANKLE = 24, 26, 28
+        LEFT_SHOULDER, LEFT_ELBOW, LEFT_WRIST = 11, 13, 15
+        RIGHT_SHOULDER, RIGHT_ELBOW, RIGHT_WRIST = 12, 14, 16
+        NOSE = 0
+        
+        # Calculate angles
+        left_knee_angle = calculate_angle(
+            landmarks[LEFT_HIP], landmarks[LEFT_KNEE], landmarks[LEFT_ANKLE]
+        )
+        right_knee_angle = calculate_angle(
+            landmarks[RIGHT_HIP], landmarks[RIGHT_KNEE], landmarks[RIGHT_ANKLE]
+        )
+        left_hip_angle = calculate_angle(
+            landmarks[LEFT_SHOULDER], landmarks[LEFT_HIP], landmarks[LEFT_KNEE]
+        )
+        right_hip_angle = calculate_angle(
+            landmarks[RIGHT_SHOULDER], landmarks[RIGHT_HIP], landmarks[RIGHT_KNEE]
+        )
+        left_elbow_angle = calculate_angle(
+            landmarks[LEFT_SHOULDER], landmarks[LEFT_ELBOW], landmarks[LEFT_WRIST]
+        )
+        right_elbow_angle = calculate_angle(
+            landmarks[RIGHT_SHOULDER], landmarks[RIGHT_ELBOW], landmarks[RIGHT_WRIST]
+        )
+        
+        # Average angles
+        avg_knee_angle = (left_knee_angle + right_knee_angle) / 2
+        avg_hip_angle = (left_hip_angle + right_hip_angle) / 2
+        avg_elbow_angle = (left_elbow_angle + right_elbow_angle) / 2
+        
+        # Check symmetry
+        knee_symmetry = abs(left_knee_angle - right_knee_angle)
+        hip_symmetry = abs(left_hip_angle - right_hip_angle)
+        
+        # Generate feedback based on exercise type and angles
+        corrections = []
+        score = 100
+        injury_risk = "low"
+        
+        # Exercise-specific analysis
+        if exercise_type in ["squat", "barbell_squat", "goblet_squat", "front_squat"]:
+            if avg_knee_angle > 160:
+                corrections.append("Bend your knees more - aim for 90° at the bottom")
+                score -= 20
+            elif avg_knee_angle < 70:
+                corrections.append("You're going too deep - stop at 90° knee bend")
+                score -= 10
+            
+            if avg_hip_angle > 150:
+                corrections.append("Hinge at your hips more")
+                score -= 15
+            
+            if knee_symmetry > 15:
+                corrections.append(f"Your knees are uneven ({knee_symmetry:.0f}° difference)")
+                score -= 10
+                injury_risk = "medium"
+                
+        elif exercise_type in ["pushup", "diamond_pushup"]:
+            if avg_elbow_angle > 160:
+                corrections.append("Lower your body - bend elbows to 90°")
+                score -= 20
+            elif avg_elbow_angle < 60:
+                corrections.append("You're going too low")
+                score -= 10
+                
+        elif exercise_type in ["plank", "side_plank"]:
+            if avg_hip_angle < 160:
+                corrections.append("Keep your body straight - don't let hips sag")
+                score -= 15
+                injury_risk = "medium"
+            elif avg_hip_angle > 200:
+                corrections.append("Lower your hips - body should be straight")
+                score -= 15
+                
+        elif exercise_type in ["lunge", "walking_lunge", "bulgarian_split_squat"]:
+            if avg_knee_angle > 160:
+                corrections.append("Step deeper into the lunge")
+                score -= 15
+            if knee_symmetry > 20:
+                corrections.append("Keep your front knee stable")
+                score -= 10
+                
+        elif exercise_type in ["deadlift", "romanian_deadlift"]:
+            if avg_hip_angle > 160:
+                corrections.append("Hinge more at the hips")
+                score -= 15
+            if avg_knee_angle < 150:
+                corrections.append("Keep your knees straighter")
+                score -= 10
+                
+        # General checks
+        if hip_symmetry > 15:
+            corrections.append(f"Your hips are uneven ({hip_symmetry:.0f}° difference)")
+            score -= 10
+            
+        # Ensure score is in range
+        score = max(0, min(100, score))
+        
+        # Set injury risk based on score
+        if score < 50:
+            injury_risk = "high"
+        elif score < 70:
+            injury_risk = "medium"
+            
+        if not corrections:
+            corrections.append("Great form! Keep it up!")
+        
+        analysis = {
+            "overallScore": round(score, 1),
+            "formAnalysis": {
+                "leftKneeAngle": left_knee_angle,
+                "rightKneeAngle": right_knee_angle,
+                "avgKneeAngle": round(avg_knee_angle, 1),
+                "leftHipAngle": left_hip_angle,
+                "rightHipAngle": right_hip_angle,
+                "avgHipAngle": round(avg_hip_angle, 1),
+                "kneeSymmetry": "good" if knee_symmetry < 10 else "needs_improvement",
+                "hipSymmetry": "good" if hip_symmetry < 10 else "needs_improvement"
+            },
+            "corrections": corrections,
+            "injuryRisk": injury_risk
+        }
         
         return {
             "success": True,
@@ -262,6 +435,7 @@ async def analyze_pose(file: UploadFile = File(...), exercise_type: str = "squat
             "timestamp": datetime.now().isoformat()
         }
     except Exception as e:
+        print(f"Pose analysis error: {e}")
         raise HTTPException(status_code=500, detail=str(e))
 
 @app.get("/pose/exercises")

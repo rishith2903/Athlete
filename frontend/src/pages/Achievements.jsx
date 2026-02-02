@@ -35,8 +35,8 @@ const Achievements = () => {
             setAchievements(achievementsRes.data.data || []);
         } catch (error) {
             console.error('Failed to fetch data:', error);
-            setStats(SAMPLE_STATS);
-            setAchievements(SAMPLE_ACHIEVEMENTS);
+            setStats({ level: 1, totalXp: 0, currentStreak: 0, longestStreak: 0, totalWorkouts: 0, totalVolume: 0, totalPRs: 0 });
+            setAchievements([]);
         } finally {
             setLoading(false);
         }
@@ -134,8 +134,8 @@ const Achievements = () => {
                         key={tab.id}
                         onClick={() => setActiveTab(tab.id)}
                         className={`flex-1 flex items-center justify-center gap-2 py-3 rounded-lg font-medium transition ${activeTab === tab.id
-                                ? 'bg-white dark:bg-gray-700 text-blue-600 dark:text-blue-400 shadow-sm'
-                                : 'text-gray-600 dark:text-gray-400'
+                            ? 'bg-white dark:bg-gray-700 text-blue-600 dark:text-blue-400 shadow-sm'
+                            : 'text-gray-600 dark:text-gray-400'
                             }`}
                     >
                         <tab.icon className="h-5 w-5" />
@@ -279,7 +279,7 @@ const LeaderboardView = () => {
             setLeaderboard(response.data.data || []);
         } catch (error) {
             console.error('Failed to fetch leaderboard:', error);
-            setLeaderboard(SAMPLE_LEADERBOARD);
+            setLeaderboard([]);
         } finally {
             setLoading(false);
         }
@@ -317,8 +317,8 @@ const LeaderboardView = () => {
                             key={type.id}
                             onClick={() => setLeaderboardType(type.id)}
                             className={`px-4 py-2 rounded-lg flex items-center gap-2 text-sm font-medium transition whitespace-nowrap ${leaderboardType === type.id
-                                    ? 'bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-400'
-                                    : 'bg-gray-100 text-gray-600 dark:bg-gray-700 dark:text-gray-400'
+                                ? 'bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-400'
+                                : 'bg-gray-100 text-gray-600 dark:bg-gray-700 dark:text-gray-400'
                                 }`}
                         >
                             <type.icon className="h-4 w-4" />
@@ -369,32 +369,5 @@ const LeaderboardView = () => {
         </div>
     );
 };
-
-// Sample data
-const SAMPLE_STATS = {
-    level: 5,
-    totalXp: 1250,
-    currentStreak: 7,
-    longestStreak: 14,
-    totalWorkouts: 47,
-    totalVolume: 45000,
-    totalPRs: 12
-};
-
-const SAMPLE_ACHIEVEMENTS = [
-    { id: '1', name: 'First Workout', description: 'Complete your first workout', icon: '💪', category: 'MILESTONE', tier: 1, xpReward: 50, earnedAt: '2024-11-01' },
-    { id: '2', name: 'Getting Started', description: 'Complete 10 workouts', icon: '🏋️', category: 'MILESTONE', tier: 1, xpReward: 100, earnedAt: '2024-11-15' },
-    { id: '3', name: 'Week Warrior', description: '7 day workout streak', icon: '🔥', category: 'STREAK', tier: 1, xpReward: 100, earnedAt: '2024-12-01' },
-    { id: '4', name: 'Personal Best', description: 'Break your first PR', icon: '⭐', category: 'STRENGTH', tier: 1, xpReward: 75, earnedAt: '2024-11-20' },
-    { id: '5', name: '10K Club', description: 'Lift 10,000 kg total', icon: '🏗️', category: 'VOLUME', tier: 1, xpReward: 100, earnedAt: '2024-11-25' },
-];
-
-const SAMPLE_LEADERBOARD = [
-    { userId: 'user123abc', level: 12, totalXp: 5600, currentStreak: 21, totalVolume: 125000, totalWorkouts: 89 },
-    { userId: 'user456def', level: 10, totalXp: 4200, currentStreak: 14, totalVolume: 98000, totalWorkouts: 72 },
-    { userId: 'user789ghi', level: 8, totalXp: 3100, currentStreak: 7, totalVolume: 75000, totalWorkouts: 56 },
-    { userId: 'user012jkl', level: 6, totalXp: 1800, currentStreak: 5, totalVolume: 52000, totalWorkouts: 41 },
-    { userId: 'user345mno', level: 5, totalXp: 1250, currentStreak: 3, totalVolume: 45000, totalWorkouts: 35 },
-];
 
 export default Achievements;

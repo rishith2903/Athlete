@@ -438,8 +438,81 @@ class NutritionModelTrainer:
         
         logger.info(f"Checkpoint saved to {checkpoint_path}")
 
+def load_real_data(data_path: str = None, max_samples: int = 5000) -> Dict:
+    """Load real training data from processed_recipes.csv."""
+    if data_path is None:
+        # Find the processed recipes file
+        possible_paths = [
+            Path(__file__).parent / "processed_recipes.csv",
+            Path(__file__).parent.parent.parent.parent.parent / "data" / "Nutritional Meal Planner" / "processed_recipes.csv",
+        ]
+        for path in possible_paths:
+            if path.exists():
+                data_path = path
+                break
+    
+    if data_path is None or not Path(data_path).exists():
+        logger.warning("Real data not found, falling back to synthetic data")
+        return generate_synthetic_data(max_samples)
+    
+    logger.info(f"Loading real data from {data_path}...")
+    recipes_df = pd.read_csv(data_path, nrows=max_samples)
+    
+    meal_data = []
+    for _, row in recipes_df.iterrows():
+        meal = {
+            'user_profile': {
+                'dietary_restrictions': [],
+                'allergies': [],
+                'age': random.randint(18, 70),
+                'weight': random.randint(50, 100),
+                'activity_level': random.uniform(1.2, 2.0)
+            },
+            'constraints': {
+                'calories': float(row.get('calories', 400)),
+                'protein': float(row.get('protein', 20)),
+                'carbs': float(row.get('carbs', 50)),
+                'fat': float(row.get('fat', 15)),
+                'fiber': 5.0
+            },
+            'meal_type': str(row.get('meal_type', 'lunch')),
+            'meal_description': str(row.get('name', 'A delicious meal'))
+        }
+        
+        # Add dietary flags from real data
+        if row.get('is_vegetarian', False):
+            meal['user_profile']['dietary_restrictions'].append('vegetarian')
+        if row.get('is_vegan', False):
+            meal['user_profile']['dietary_restrictions'].append('vegan')
+        if row.get('is_gluten_free', False):
+            meal['user_profile']['dietary_restrictions'].append('gluten_free')
+            
+        meal_data.append(meal)
+    
+    # Build knowledge graph from real data
+    graph = nx.Graph()
+    unique_meal_types = recipes_df['meal_type'].unique() if 'meal_type' in recipes_df.columns else ['breakfast', 'lunch', 'dinner']
+    
+    for i, meal_type in enumerate(unique_meal_types):
+        graph.add_node(i, name=meal_type, type='meal_type')
+    
+    nutrients = ['calories', 'protein', 'carbs', 'fat']
+    for i, nutrient in enumerate(nutrients):
+        graph.add_node(len(unique_meal_types) + i, name=nutrient, type='nutrient')
+        
+    # Connect meal types to nutrients
+    for i in range(len(unique_meal_types)):
+        for j in range(len(nutrients)):
+            graph.add_edge(i, len(unique_meal_types) + j)
+    
+    logger.info(f"Loaded {len(meal_data)} real recipes for training")
+    return {
+        'meal_data': meal_data,
+        'knowledge_graph': graph
+    }
+
 def generate_synthetic_data(num_samples: int = 1000) -> Dict:
-    """Generate synthetic training data for the nutrition model."""
+    """Generate synthetic training data for the nutrition model (fallback)."""
     logger.info(f"Generating {num_samples} synthetic samples...")
     
     # Food classes
@@ -511,13 +584,16 @@ def main():
     # Initialize trainer
     trainer = NutritionModelTrainer(model, config)
     
-    # Generate synthetic data
-    synthetic_data = generate_synthetic_data(num_samples=1000)
+    # Try to load real data first, fall back to synthetic
+    try:
+        training_data = load_real_data(max_samples=5000)
+    except Exception as e:
+        logger.warning(f"Could not load real data: {e}. Using synthetic data...")
+        training_data = generate_synthetic_data(num_samples=1000)
     
     # Create data loaders
-    # Note: In production, you would load real data here
     meal_dataset = MealGenerationDataset(
-        synthetic_data['meal_data'],
+        training_data['meal_data'],
         model.meal_generator.tokenizer
     )
     
@@ -533,7 +609,7 @@ def main():
     data_loaders = {
         'generator_train': train_loader,
         'generator_val': val_loader,
-        'graph': synthetic_data['knowledge_graph']
+        'graph': training_data['knowledge_graph']
     }
     
     # Train the model

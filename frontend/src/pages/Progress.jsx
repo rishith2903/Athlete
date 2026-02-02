@@ -47,13 +47,13 @@ const Progress = () => {
                 api.get('/stats/dashboard'),
                 api.get('/stats/frequency?weeks=12')
             ]);
-            setStats(statsRes.data.data);
+            setStats(statsRes.data.data || { totalWorkouts: 0, workoutsThisWeek: 0, workoutsThisMonth: 0, currentStreak: 0 });
             setFrequencyData(freqRes.data.data || []);
         } catch (error) {
             console.error('Failed to fetch stats:', error);
-            // Use sample data
-            setStats(SAMPLE_STATS);
-            setFrequencyData(SAMPLE_FREQUENCY);
+            // Show empty state instead of sample data
+            setStats({ totalWorkouts: 0, workoutsThisWeek: 0, workoutsThisMonth: 0, currentStreak: 0 });
+            setFrequencyData([]);
         } finally {
             setLoading(false);
         }
@@ -64,21 +64,21 @@ const Progress = () => {
             const year = currentMonth.getFullYear();
             const month = currentMonth.getMonth() + 1;
             const response = await api.get(`/stats/calendar?year=${year}&month=${month}`);
-            setCalendarData(response.data.data || []);
+            setCalendarData(response.data.data || generateEmptyCalendar());
         } catch (error) {
             console.error('Failed to fetch calendar:', error);
-            setCalendarData(generateSampleCalendar());
+            setCalendarData(generateEmptyCalendar());
         }
     };
 
-    const generateSampleCalendar = () => {
+    const generateEmptyCalendar = () => {
         const days = [];
         const daysInMonth = new Date(currentMonth.getFullYear(), currentMonth.getMonth() + 1, 0).getDate();
         for (let i = 1; i <= daysInMonth; i++) {
             days.push({
                 day: i,
-                hasWorkout: Math.random() > 0.6,
-                workoutCount: Math.random() > 0.8 ? 2 : 1
+                hasWorkout: false,
+                workoutCount: 0
             });
         }
         return days;
@@ -153,6 +153,10 @@ const Progress = () => {
                     <div className="h-64">
                         {loading ? (
                             <div className="h-full bg-gray-100 dark:bg-gray-700 rounded animate-pulse"></div>
+                        ) : frequencyData.length === 0 ? (
+                            <div className="h-full flex items-center justify-center text-gray-500">
+                                <p>No workout data yet. Start working out to see your progress!</p>
+                            </div>
                         ) : (
                             <ResponsiveContainer width="100%" height="100%">
                                 <BarChart data={frequencyData}>
@@ -186,6 +190,10 @@ const Progress = () => {
                     <div className="h-64">
                         {loading ? (
                             <div className="h-full bg-gray-100 dark:bg-gray-700 rounded animate-pulse"></div>
+                        ) : frequencyData.length === 0 ? (
+                            <div className="h-full flex items-center justify-center text-gray-500">
+                                <p>No volume data yet. Complete workouts to track your progress!</p>
+                            </div>
                         ) : (
                             <ResponsiveContainer width="100%" height="100%">
                                 <AreaChart data={frequencyData}>
@@ -336,27 +344,5 @@ const StatCard = ({ icon: Icon, label, value, color }) => {
         </motion.div>
     );
 };
-
-// Sample data
-const SAMPLE_STATS = {
-    totalWorkouts: 47,
-    workoutsThisWeek: 4,
-    workoutsThisMonth: 12,
-    currentStreak: 7,
-    totalVolumeThisMonth: 45000
-};
-
-const SAMPLE_FREQUENCY = [
-    { weekStart: '2024-10-07', workoutCount: 3, totalVolume: 12000 },
-    { weekStart: '2024-10-14', workoutCount: 4, totalVolume: 15000 },
-    { weekStart: '2024-10-21', workoutCount: 3, totalVolume: 11000 },
-    { weekStart: '2024-10-28', workoutCount: 5, totalVolume: 18000 },
-    { weekStart: '2024-11-04', workoutCount: 4, totalVolume: 14000 },
-    { weekStart: '2024-11-11', workoutCount: 3, totalVolume: 12000 },
-    { weekStart: '2024-11-18', workoutCount: 4, totalVolume: 16000 },
-    { weekStart: '2024-11-25', workoutCount: 2, totalVolume: 8000 },
-    { weekStart: '2024-12-02', workoutCount: 5, totalVolume: 19000 },
-    { weekStart: '2024-12-09', workoutCount: 4, totalVolume: 15000 },
-];
 
 export default Progress;

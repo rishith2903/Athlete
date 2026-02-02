@@ -1,7 +1,10 @@
 import axios from 'axios';
 
 // Point to Spring Boot backend. The backend will call Python AI services.
-const API_BASE_URL = 'https://athlete-klsi.onrender.com/api';
+// Auto-detect: use localhost in development, deployed URL in production
+const API_BASE_URL = window.location.hostname === 'localhost'
+  ? 'http://localhost:8080/api'
+  : 'https://athlete-klsi.onrender.com/api';
 
 // Create axios instance with default config
 const api = axios.create({
@@ -132,16 +135,30 @@ export const chatbotAPI = {
   getSuggestions: () => api.get('/chatbot/suggestions'),
 };
 
-// Pose analysis endpoints (Spring: /api/pose)
+// Pose analysis endpoints - Direct call to Python AI service
+const AI_SERVICE_URL = 'http://localhost:8000';
+
 export const poseAPI = {
-  analyzePose: async (file, exerciseType) => {
+  analyzePose: async (file, exerciseType, skillLevel = 'beginner') => {
     const form = new FormData();
-    form.append('file', file);
-    form.append('exerciseType', exerciseType);
-    return api.post('/pose/check', form, {
-      headers: { 'Content-Type': 'multipart/form-data' },
-    });
+    form.append('file', file, 'snapshot.jpg');
+    form.append('exercise_type', exerciseType || 'squat');
+
+    try {
+      const response = await fetch(`${AI_SERVICE_URL}/pose/analyze`, {
+        method: 'POST',
+        body: form,
+      });
+      const data = await response.json();
+      return { data }; // Wrap to match expected structure
+    } catch (error) {
+      console.error('Direct AI service error:', error);
+      throw error;
+    }
   },
+  getSkillLevels: () => api.get('/pose/skill-levels'),
+  getSupportedExercises: () => fetch(`${AI_SERVICE_URL}/pose/exercises`).then(r => r.json()),
+  resetRepCount: (exerciseType) => Promise.resolve({ data: { success: true } }),
 };
 
 // Progress tracking endpoints (Spring likely: /api/progress)

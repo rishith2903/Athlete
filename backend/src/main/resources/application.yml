@@ -28,10 +28,7 @@ spring:
       max-request-size: 50MB
   
   cache:
-    type: redis
-    redis:
-      time-to-live: 600000
-      cache-null-values: false
+    type: none  # Changed from redis - Redis not installed locally
 
 server:
   port: ${PORT:8080}
@@ -52,16 +49,16 @@ jwt:
 ai:
   services:
     workout-recommender:
-      url: ${WORKOUT_SERVICE_URL:http://localhost:8001}
+      url: ${WORKOUT_SERVICE_URL:http://localhost:8000/workout}
       timeout: 30000
     nutrition-planner:
-      url: ${NUTRITION_SERVICE_URL:http://localhost:8002}
+      url: ${NUTRITION_SERVICE_URL:http://localhost:8000/nutrition}
       timeout: 30000
     pose-checker:
-      url: ${POSE_SERVICE_URL:http://localhost:8003}
+      url: ${POSE_SERVICE_URL:http://localhost:8000/pose}
       timeout: 60000
     chatbot:
-      url: ${CHATBOT_SERVICE_URL:http://localhost:8004}
+      url: ${CHATBOT_SERVICE_URL:http://localhost:8000/chat}
       timeout: 30000
 
 # AWS S3 Configuration (optional)
